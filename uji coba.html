@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UPLOAD - DKV</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#0a0a0c;color:#e8e8ec;padding:14px}
+.wrap{max-width:480px;margin:0 auto}
+h1{font-size:20px} small{color:#aaa}
+.card{background:#17171a;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:14px;margin-top:12px}
+label{font-size:12px;color:#c0c0c8;display:block;margin-top:10px}
+input,textarea,select{width:100%;padding:11px;border-radius:10px;border:1px solid rgba(255,255,255,.16);background:#000;color:#fff;outline:none;font-size:14px;margin-top:4px}
+textarea{min-height:120px}
+.pilih{display:flex;gap:8px;margin-top:6px}.pilih button{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:#222;color:#fff;font-weight:900;cursor:pointer}.pilih button.on{background:#e8e8ec;color:#111}
+.btn{width:100%;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#e8e8ec,#a8a8b0);color:#111;font-weight:900;font-size:14px;cursor:pointer;margin-top:12px}
+.btn2{width:100%;padding:11px;border:1px solid rgba(255,255,255,.2);border-radius:12px;background:#222;color:#fff;font-weight:900;cursor:pointer;margin-top:8px}
+.item{background:#0d0d0f;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px;margin-top:8px;display:flex;gap:10px;align-items:center}
+.item img,.item video{width:64px;height:64px;object-fit:cover;border-radius:8px;background:#000;flex-shrink:0}
+.item b{font-size:13px;display:block}.item small{color:#aaa;font-size:11px}
+.item button{margin-left:auto;padding:8px 10px;border:none;border-radius:8px;background:#ff2222;color:#fff;font-weight:900;cursor:pointer;flex-shrink:0}
+.hint{font-size:12px;color:#aaa;line-height:1.6;margin-top:8px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#e8e8ec;color:#111;padding:12px 18px;border-radius:20px;font-weight:900;font-size:13px;display:none;z-index:99}
+</style>
+</head>
+<body>
+  
+  <div class="pintas">
+    <a href="upload.html"><button type="submit">klik</button></a>
+  </div>
+<div class="wrap">
+<h1>👑 UPLOAD OWNER</h1><small>Catbox • Tanpa batas • Orang lain bisa liat di Hasil</small>
+<div class="card">
+<label>Nama</label><input id="nama" placeholder="RIZI" value="RIZI 👑 OWNER">
+<label>Judul (buat 1 karya, kalo upload banyak, judulnya auto jadi Judul 1, 2, 3...)</label><input id="judul" placeholder="Contoh: Karya DKV Hari Ini">
+<label>Kategori</label><input id="kategori" placeholder="DKV" value="DKV">
+<label>Deskripsi</label><textarea id="desk" placeholder="Ceritain karya lu..."></textarea>
+<label>Tipe default (kalo link Catbox-nya gak ada .mp4 / .jpg, pake ini)</label>
+<div class="pilih"><button id="btnFoto" onclick="pilihTipe('foto')">📸 FOTO</button><button id="btnVideo" class="on" onclick="pilihTipe('video')">🎬 VIDEO</button></div>
+<label>Paste link Catbox di sini — 1 BARIS = 1 KARYA. Mau 1, 10, 100 juga bisa, gak ada batas!</label>
+<textarea id="links" placeholder="https://files.catbox.moe/abc123.mp4&#10;https://files.catbox.moe/def456.jpg&#10;https://files.catbox.moe/ghi789"></textarea>
+<div class="hint">Cara upload Catbox:<br>1. Buka catbox.moe → upload foto/video lu<br>2. Copy link-nya → paste di atas, 1 link 1 baris<br>3. Pencet UPLOAD SEMUA</div>
+<button class="btn" onclick="uploadSemua()">🚀 UPLOAD SEMUA (TANPA BATAS)</button>
+<button class="btn2" onclick="location.href='index.html'">👀 LIAT HASIL</button>
+</div>
+<div class="card"><b>📦 Semua Karya (<span id="total">0</span>)</b><div id="list"></div><button class="btn2" onclick="loadData()">🔄 REFRESH LIST</button></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const NPOINT_ID="43118ccd0ef279ea8490";const URL_API="https://api.npoint.io/"+NPOINT_ID;
+let tipe='video',list=[];
+function toast(t){let e=document.getElementById('toast');e.innerText=t;e.style.display='block';setTimeout(()=>e.style.display='none',2500)}
+function pilihTipe(t){tipe=t;document.getElementById('btnFoto').classList.toggle('on',t==='foto');document.getElementById('btnVideo').classList.toggle('on',t==='video')}
+function tebakTipe(link){
+  let l=link.toLowerCase();
+  if(/\.(mp4|mov|webm|m4v|mkv)(\?|#|$)/.test(l))return'video';
+  if(/\.(jpg|jpeg|png|gif|webp|avif|bmp)(\?|#|$)/.test(l))return'foto';
+  return tipe;
+}
+async function loadData(){
+  try{let r=await fetch(URL_API,{cache:'no-store'});let d=await r.json();list=Array.isArray(d)?d:[]}catch(e){list=[]}
+  document.getElementById('total').innerText=list.length;
+  document.getElementById('list').innerHTML=list.slice().reverse().map(k=>{
+    let link=k.link||k.linkFoto||'';
+    let thumb=(k.tipe==='video')?`<video src="${link}" muted playsinline preload="metadata" style="width:64px;height:64px"></video>`:`<img src="${link}" onerror="this.style.display='none'">`;
+    return `<div class="item">${thumb}<div><b>${k.judul||''}</b><small>${k.tipe||''} • ${k.nama||''}</small></div><button onclick="hapus(${k.id})">HAPUS</button></div>`;
+  }).join('')||'<p style="color:#888;font-size:12px;margin-top:8px">Belum ada karya</p>';
+}
+async function uploadSemua(){
+  let nama=document.getElementById('nama').value.trim()||'RIZI 👑 OWNER';
+  let judulBase=document.getElementById('judul').value.trim()||'Karya DKV';
+  let kategori=document.getElementById('kategori').value.trim()||'DKV';
+  let desk=document.getElementById('desk').value.trim()||'Tanpa deskripsi.';
+  let raw=document.getElementById('links').value.split('\n').map(s=>s.trim()).filter(s=>s.startsWith('http'));
+  if(!raw.length){toast('Paste dulu link Catbox-nya!');return}
+  toast('⏳ Lagi upload '+raw.length+' karya...');
+  await loadData();
+  let now=Date.now();
+  raw.forEach((link,i)=>{
+    let t=tebakTipe(link);
+    let judul=raw.length===1?judulBase:judulBase+' '+(i+1);
+    list.push({id:now+i,tipe:t,link:link,linkFoto:(t==='foto'?link:''),judul:judul,nama:nama,kategori:kategori,desk:desk,waktu:new Date().toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),komen:[]});
+  });
+  // GAK ADA slice() / BATAS DI SINI - BERAPA PUN KE-SIMPEN SEMUA
+  try{let r=await fetch(URL_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(list)});if(!r.ok)throw new Error('gagal');document.getElementById('links').value='';toast('✅ Berhasil upload '+raw.length+' karya!');loadData()}catch(e){toast('❌ Gagal upload, cek internet')}
+}
+async function hapus(id){if(!confirm('Hapus karya ini?'))return;list=list.filter(k=>k.id!==id);await fetch(URL_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(list)});loadData();toast('🗑️ Dihapus')}
+loadData();
+</script>
+</body>
+</html>
