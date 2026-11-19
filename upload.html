@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>UPLOAD - OWNER RIZI DKV</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#0a0800;color:#ffe98a;min-height:100vh}
+.wrap{max-width:480px;margin:0 auto;min-height:100vh;background:linear-gradient(180deg,#1a1400,#0a0800,#000);display:flex;flex-direction:column;border-left:1px solid #d4af37;border-right:1px solid #d4af37;position:relative}
+.topBar{display:flex;align-items:center;gap:10px;padding:14px;background:linear-gradient(180deg,#2a2100,#171100);border-bottom:1px solid #d4af37;position:sticky;top:0;z-index:20}
+.btnNav{width:38px;height:38px;border-radius:10px;border:1px solid #d4af37;background:#1a1400;color:#FFD700;font-size:18px;cursor:pointer;flex-shrink:0;line-height:1;display:flex;align-items:center;justify-content:center}
+.btnNav svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.logo{width:44px;height:44px;background:linear-gradient(135deg,#FFD700,#FFB800,#8a6d00);border:1px solid #FFD700;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;overflow:hidden;flex-shrink:0}
+.logoSvg{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.logoSvg b{font-size:10px;letter-spacing:1px;line-height:1;color:#000}
+.logoSvg small{font-size:5px;letter-spacing:1px;color:#000}
+.topTitle{flex:1}.topTitle small{color:#FFD700;font-size:9px;letter-spacing:2px}.topTitle b{font-size:17px;color:#FFD700}
+.btnKunci{background:#1a1400;color:#FFD700;padding:8px 10px;border-radius:20px;font-weight:900;font-size:11px;border:1px solid #d4af37;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.btnKunci svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btnNotif{position:relative;width:38px;height:38px;border-radius:50%;border:1px solid #d4af37;background:#1a1400;color:#FFD700;font-size:16px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.btnNotif svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btnNotif .badge{position:absolute;top:-4px;right:-4px;background:#ff2222;color:#fff;font-size:10px;font-weight:900;min-width:18px;height:18px;border-radius:20px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.section{padding:12px 12px 4px;font-size:11px;letter-spacing:2px;color:#FFD700;font-weight:900;display:flex;align-items:center;gap:6px}
+.section svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sideMenu{position:fixed;top:0;left:-300px;width:280px;max-width:85vw;height:100vh;height:100dvh;background:rgba(26,20,0,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-right:1px solid #d4af37;z-index:100;transition:left .3s ease;display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:env(safe-area-inset-bottom)}
+.sideMenu.show{left:0}
+.navHead{padding:14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #2a2100;background:rgba(42,33,0,.65);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);flex-shrink:0;position:sticky;top:0;z-index:5;padding-top:calc(14px + env(safe-area-inset-top))}
+.navCrown{width:52px;height:52px;flex-shrink:0;border-radius:14px;background:linear-gradient(135deg,#FFD700,#FFB800);border:1px solid #FFD700;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(255,215,0,.25);color:#000}
+.navCrown svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.navHeadText{flex:1;min-width:0;line-height:1.2}
+.navHeadText b{font-size:16px;color:#FFD700}
+.navHeadText span{font-size:10px;color:#e8d5a3;letter-spacing:1px}
+.navClose{width:38px;height:38px;flex-shrink:0;background:transparent;color:#FFD700;border:1px solid #d4af37;border-radius:10px;font-size:16px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.navClose svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round}
+.navLabel{padding:14px 14px 6px;font-size:11px;letter-spacing:2px;color:#a68a2e;font-weight:900}
+.navItem{display:flex;align-items:center;gap:12px;padding:12px 14px;background:none;border:none;border-bottom:1px solid #2a2100;color:#ffe98a;text-align:left;cursor:pointer;width:100%}
+.navItem:active{background:#2a2100}
+.navItem.on{background:linear-gradient(90deg,#FFD700,#FFB800);color:#000}
+.navIcon{width:44px;height:44px;flex-shrink:0;border-radius:12px;background:#1a1400;border:1px solid #d4af37;display:flex;align-items:center;justify-content:center}
+.navIcon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.navItem.on .navIcon{background:rgba(0,0,0,.15);border-color:rgba(0,0,0,.2)}
+.navText{flex:1;min-width:0}
+.navText b{font-size:14px;display:block;line-height:1.2}
+.navText span{font-size:11px;color:#e8d5a3;display:block;margin-top:2px;line-height:1.3}
+.navArrow{font-size:16px;color:#a68a2e;flex-shrink:0}
+.navItem.on .navArrow{color:#000}
+.navFoot{margin-top:auto;padding:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));text-align:center;font-size:11px;color:#a68a2e;border-top:1px solid #2a2100;flex-shrink:0}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:99;display:none}
+.overlay.show{display:block}
+.lockBox{margin:16px 12px;padding:20px;border-radius:18px;background:#171100;border:1px solid #d4af37;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.6)}
+.lockBox .lockIcon{font-size:44px;display:flex;justify-content:center}
+.lockBox .lockIcon svg{width:44px;height:44px;fill:none;stroke:#FFD700;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lockBox b{font-size:16px;color:#FFD700;display:block;margin-top:6px}
+.lockBox p{font-size:12px;color:#e8d5a3;margin-top:6px;line-height:1.5}
+.lockBox input{width:100%;padding:13px;border-radius:14px;border:1px solid #d4af37;background:#0a0800;color:#FFD700;outline:none;margin:12px 0 8px;font-size:16px;text-align:center;letter-spacing:6px;font-weight:900}
+.lockBox input::placeholder{letter-spacing:1px;font-weight:400;font-size:13px;color:#a68a2e}
+.btnBuka{width:100%;padding:13px;border:none;border-radius:14px;background:linear-gradient(180deg,#FFD700,#FFB800);color:#000;font-weight:900;font-size:14px;cursor:pointer;border:1px solid #FFD700;display:flex;align-items:center;justify-content:center;gap:6px}
+.btnBuka svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btnBack{margin-top:8px;background:none;border:none;color:#FFD700;font-weight:900;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:5px}
+.btnBack svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round}
+.infoBox{margin:10px 12px;padding:12px;border-radius:16px;background:#171100;border:1px solid #d4af37}
+.infoBox b{color:#FFD700;font-size:12px;display:flex;align-items:center;gap:6px}.infoBox b svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.infoBox p{font-size:12px;color:#e8d5a3;margin-top:4px;line-height:1.5}
+.formBox{margin:10px 12px 12px;background:#171100;border:1px solid #d4af37;border-radius:18px;padding:12px}
+.formBox label{font-size:11px;color:#FFD700;font-weight:900;display:flex;align-items:center;gap:5px}.formBox label svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.formBox input,.formBox textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #d4af37;background:#0a0800;color:#fff;outline:none;margin:6px 0 10px;font-size:13px}
+.formBox textarea{min-height:50px}
+.katRow{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+.katRow button{padding:8px 12px;border-radius:20px;background:#1a1400;color:#FFD700;border:1px solid #d4af37;font-size:11px;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.katRow button svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.katRow button.on{background:linear-gradient(180deg,#FFD700,#FFB800);color:#000;font-weight:900}
+.tipeRow{display:flex;gap:8px;margin:6px 0 10px}
+.tipeRow button{flex:1;padding:11px;border-radius:12px;background:#1a1400;color:#FFD700;border:1px solid #d4af37;font-weight:900;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.tipeRow button svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tipeRow button.on{background:linear-gradient(180deg,#FFD700,#FFB800);color:#000}
+.previewBox{margin:0 12px 12px;display:none}.previewBox.show{display:block}
+.previewBox img{width:100%;border-radius:16px;border:1px solid #d4af37;max-height:300px;object-fit:cover;background:#000}
+.btnUpload{width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(180deg,#FFD700,#FFB800);color:#000;font-weight:900;font-size:15px;cursor:pointer;border:1px solid #FFD700;display:flex;align-items:center;justify-content:center;gap:6px}
+.btnUpload svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btnUpload:disabled{opacity:.5}
+.btnLihat{width:100%;margin-top:10px;padding:12px;border-radius:14px;background:#1a1400;color:#FFD700;border:1px solid #d4af37;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.btnLihat svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#FFD700;color:#000;padding:12px 18px;border-radius:20px;font-weight:bold;font-size:13px;display:none;z-index:100;border:1px solid #FFB800}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="overlay hidden" id="overlay" onclick="toggleMenu(false)"></div>
+  <div class="sideMenu hidden" id="sideMenu">
+    <div class="navHead">
+      <div class="navCrown"><svg viewBox="0 0 24 24"><path d="M3 8l4 4 5-6 5 6 4-4v10H3z"/><path d="M3 18h18"/></svg></div>
+      <div class="navHeadText"><b>ALFARIZI</b><br><span>OWNER PANEL</span></div>
+      <button class="navClose" onclick="toggleMenu(false)"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <div class="navLabel">MENU UTAMA</div>
+    <button class="navItem" onclick="location.href='index.html'"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></span><span class="navText"><b>Home</b><span>Liat Hasil Karya DKV</span></span><span class="navArrow">›</span></button>
+    <button class="navItem" onclick="location.href='chat.html'"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 21l2-5.6A8.5 8.5 0 1 1 21 11.5z"/></svg></span><span class="navText"><b>Chat</b><span>Ngobrol sama semua orang</span></span><span class="navArrow">›</span></button>
+    <button class="navItem on" onclick="toggleMenu(false)"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M3 8l4 4 5-6 5 6 4-4v10H3z"/><path d="M3 18h18"/></svg></span><span class="navText"><b>Owner</b><span>Upload + Pantau + Hapus Karya</span></span><span class="navArrow">›</span></button>
+    <div class="navLabel">OWNER</div>
+    <button class="navItem" onclick="location.href='pantau.html'"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span><span class="navText"><b>Pantau</b><span>Pantau orang di chat</span></span><span class="navArrow">›</span></button>
+    <button class="navItem" onclick="location.href='balas-komen.html'"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 21l2-5.6A8.5 8.5 0 1 1 21 11.5z"/></svg></span><span class="navText"><b>Balas Komen</b><span>Balas + tag orang yang komen</span></span><span class="navArrow">›</span></button>
+    <button class="navItem" onclick="location.href='hapus-komen.html'"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13M10 11v5M14 11v5"/></svg></span><span class="navText"><b>Hapus Komen</b><span>Hapus komen yang jelek / spam</span></span><span class="navArrow">›</span></button>
+    <button class="navItem" onclick="location.href='hapus-uploadan.html'"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M3 8h3l2-3h8l2 3h3v11H3z"/><circle cx="12" cy="13" r="3.2"/></svg></span><span class="navText"><b>Hapus Uploadan</b><span>Hapus karya yang udah di-upload</span></span><span class="navArrow">›</span></button>
+    <div class="navFoot">ALFARIZI • Owner Only • Emas</div>
+  </div>
+  <div class="topBar">
+    <button class="btnNav hidden" id="btnNavOwner" onclick="toggleMenu(true)"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <div class="logo"><div class="logoSvg"><b>RIZI</b><small>DKV</small></div></div>
+    <div class="topTitle"><small>// OWNER PANEL - ALFARIZI</small><b>UPLOAD KARYA</b></div>
+    <button class="btnNotif" onclick="location.href='balas-komen.html'"><svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 1 0-12 0c0 6-2 6-2 6h16s-2 0-2-6"/><path d="M10 20a2.5 2.5 0 0 0 4 0"/></svg><span class="badge" id="badgeTop" style="display:none">0</span></button>
+    <button class="btnKunci hidden" id="btnKunci" onclick="kunciLagi()"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> KUNCI</button>
+  </div>
+  <div class="lockBox" id="lockBox">
+    <div class="lockIcon"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15" r="1.5"/></svg></div>
+    <b>KHUSUS OWNER</b>
+    <p>Halaman ini dikunci.<br>Cuma owner yang bisa upload.<br>Masukin PIN owner buat buka.</p>
+    <input id="pinInput" type="password" inputmode="numeric" placeholder="MASUKIN PIN OWNER" maxlength="6" onkeydown="if(event.key==='Enter')bukaKunci()">
+    <button class="btnBuka" onclick="bukaKunci()"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><path d="M12 15v1"/></svg> BUKA UPLOAD</button>
+    <p style="font-size:11px;margin-top:10px"><b></b></p>
+    <button class="btnBack" onclick="location.href='index.html'"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Balik ke Hasil aja</button>
+  </div>
+  <div id="uploadArea" class="hidden">
+    <div class="infoBox"><b><svg viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg> UPLOAD PAKE LINK CATBOX - OWNER</b><p>1. Upload foto / video lu ke <b>catbox.moe</b><br>2. Copy link-nya, tempel di bawah<br>3. Klik UPLOAD, langsung muncul di halaman HASIL • Video auto-play di depan</p></div>
+    <div class="section"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/><path d="M4 21h16"/></svg> UPLOAD BARU - OWNER</div>
+    <div class="formBox">
+      <label>TIPE KARYA</label>
+      <div class="tipeRow">
+        <button id="btnFoto" class="on" onclick="gantiTipe('foto')"><svg viewBox="0 0 24 24"><path d="M3 8h3l2-3h8l2 3h3v11H3z"/><circle cx="12" cy="13" r="3.2"/></svg> FOTO</button>
+        <button id="btnVideo" onclick="gantiTipe('video')"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg> VIDEO</button>
+      </div>
+      <label>LINK FOTO / VIDEO LU (1 KARYA)</label>
+      <input id="linkInput" placeholder="Tempel link Catbox di sini... https://files.catbox.moe/..." oninput="previewLink()">
+      <div style="font-size:11px;color:#e8d5a3;line-height:1.5;margin-bottom:10px">Catbox .mp4 = auto play di depan ✅<br>Catbox foto = langsung muncul gambarnya ✅</div>
+      <div class="previewBox" id="previewBox"><img id="previewImg" style="display:none"></div>
+      <label>JUDUL KARYA</label>
+      <input id="judulInput" placeholder="Contoh: Poster Kemerdekaan" maxlength="60">
+      <label>NAMA LU</label>
+      <input id="namaInput" placeholder="Contoh: Rizi - X DKV 1" maxlength="40">
+      <label>KATEGORI</label>
+      <div class="katRow" id="katRow">
+        <button type="button" class="on" onclick="pilihKat(this,'Foto')"><svg viewBox="0 0 24 24"><path d="M3 8h3l2-3h8l2 3h3v11H3z"/><circle cx="12" cy="13" r="3.2"/></svg> Foto</button>
+        <button type="button" onclick="pilihKat(this,'Video')"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg> Video</button>
+      </div>
+      <label>DESKRIPSI (OPSIONAL)</label>
+      <textarea id="deskInput" placeholder="Ceritain karya lu..."></textarea>
+      <button class="btnUpload" id="btnUpload" onclick="uploadKarya()"><svg viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg> UPLOAD KE HASIL</button>
+      <label style="margin-top:14px"><svg viewBox="0 0 24 24"><path d="M12 15c5-4 7-7 7-10a7 7 0 1 0-14 0c0 3 2 6 7 10z"/><circle cx="12" cy="5" r="2"/></svg> ATAU UPLOAD BANYAK SEKALIGUS (CATBOX BULK - TANPA BATAS)</label>
+      <textarea id="linksBulk" style="min-height:110px" placeholder="Paste banyak link Catbox di sini, 1 BARIS = 1 KARYA&#10;https://files.catbox.moe/abc123.mp4&#10;https://files.catbox.moe/def456.jpg&#10;https://files.catbox.moe/ghi789"></textarea>
+      <div style="font-size:11px;color:#e8d5a3;line-height:1.5;margin-bottom:10px">Mau 1, 10, 100 link juga bisa — gak ada batas. Judulnya auto jadi Judul 1, Judul 2, ... Kalo link-nya ada .mp4 / .jpg, auto-detek. Kalo gak ada ekstensi, pake TIPE yang lu pilih di atas.</div>
+      <button class="btnUpload" id="btnUploadBulk" onclick="uploadBulk()"><svg viewBox="0 0 24 24"><path d="M12 15c5-4 7-7 7-10a7 7 0 1 0-14 0c0 3 2 6 7 10z"/><circle cx="12" cy="5" r="2"/></svg> UPLOAD SEMUA (TANPA BATAS)</button>
+      <button class="btnLihat" onclick="location.href='index.html'"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><circle cx="17.5" cy="9" r="1"/></svg> LIAT HASIL UPLOAD-AN</button>
+    </div>
+    <div style="text-align:center;font-size:11px;color:#a68a2e;padding:10px">File: upload.html → hasil muncul di index.html • Owner Only</div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const NPOINT_ID = "43118ccd0ef279ea8490";
+const URL_API = "https://api.npoint.io/" + NPOINT_ID;
+const OWNER_PIN = "260809";
+let tipe='foto', kategori='Foto', karyaList=[];
+function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function setNavOwner(muncul){ document.getElementById('btnNavOwner').classList.toggle('hidden', !muncul); document.getElementById('sideMenu').classList.toggle('hidden', !muncul); if(!muncul){ document.getElementById('sideMenu').classList.remove('show'); document.getElementById('overlay').classList.add('hidden'); document.getElementById('overlay').classList.remove('show'); } }
+function toggleMenu(buka){ if(localStorage.getItem('dkv_owner_unlocked')!=='yes') return; document.getElementById('sideMenu').classList.toggle('show', buka); let o=document.getElementById('overlay'); o.classList.remove('hidden'); o.classList.toggle('show', buka); if(!buka) o.classList.add('hidden'); }
+function toast(t){let e=document.getElementById('toast');e.innerText=t;e.style.display='block';setTimeout(()=>e.style.display='none',3000)}
+function updateBadge(){ let totalKomen=0; (karyaList||[]).forEach(k=>{ totalKomen+=(k.komen||[]).length; }); let dibaca=parseInt(localStorage.getItem('dkv_komen_dibaca')||'0'); let baru=totalKomen-dibaca; if(baru<0)baru=0; let bTop=document.getElementById('badgeTop'); if(bTop){bTop.innerText=baru; bTop.style.display=baru>0?'flex':'none';} }
+function bukaKunci(){ let pin=document.getElementById('pinInput').value.trim(); if(pin===OWNER_PIN){ localStorage.setItem('dkv_owner_unlocked','yes'); document.getElementById('lockBox').classList.add('hidden'); document.getElementById('uploadArea').classList.remove('hidden'); document.getElementById('btnKunci').classList.remove('hidden'); setNavOwner(true); toast('🔓 Selamat datang, Owner!'); ambilData(); } else {toast('❌ PIN salah! Cuma owner yang bisa upload.');document.getElementById('pinInput').value='';} }
+function kunciLagi(){ localStorage.removeItem('dkv_owner_unlocked'); document.getElementById('lockBox').classList.remove('hidden'); document.getElementById('uploadArea').classList.add('hidden'); document.getElementById('btnKunci').classList.add('hidden'); setNavOwner(false); toast('🔒 Udah dikunci lagi'); }
+if(localStorage.getItem('dkv_owner_unlocked')==='yes'){ document.getElementById('lockBox').classList.add('hidden'); document.getElementById('uploadArea').classList.remove('hidden'); document.getElementById('btnKunci').classList.remove('hidden'); setNavOwner(true); } else { setNavOwner(false); }
+function pilihKat(b,k){kategori=k;document.querySelectorAll('#katRow button').forEach(x=>x.classList.remove('on'));b.classList.add('on')}
+function gantiTipe(t){tipe=t;document.getElementById('btnFoto').classList.toggle('on',t==='foto');document.getElementById('btnVideo').classList.toggle('on',t==='video');if(t==='video')pilihKat(document.querySelectorAll('#katRow button')[1],'Video');if(t==='foto')pilihKat(document.querySelectorAll('#katRow button')[0],'Foto');previewLink();}
+function ubahLinkDrive(link){let id='';let m=link.match(/\/d\/([^\/]+)/);if(m)id=m[1];else{let m2=link.match(/id=([^&]+)/);if(m2)id=m2[1];}if(id)return 'https://drive.google.com/uc?export=view&id='+id;return link;}
+function previewLink(){let link=document.getElementById('linkInput').value.trim();let box=document.getElementById('previewBox');let img=document.getElementById('previewImg');if(!link){box.classList.remove('show');return;}if(tipe==='foto'){box.classList.add('show');img.style.display='block';img.src=ubahLinkDrive(link);img.onerror=()=>{img.style.display='none';};}else{box.classList.remove('show');}}
+async function ambilData(){try{let r=await fetch(URL_API,{cache:'no-store'});let d=await r.json();karyaList=Array.isArray(d)?d:[];updateBadge();}catch(e){}}
+function tebakTipe(link){ let l=String(link||'').toLowerCase(); if(/\.(mp4|mov|webm|m4v|mkv)(\?|#|$)/.test(l)) return 'video'; if(/\.(jpg|jpeg|png|gif|webp|avif|bmp)(\?|#|$)/.test(l)) return 'foto'; return tipe; }
+function buatKarya(link,judul,nama,desk,kat){ let t=tebakTipe(link); let k=kat; if(t==='video') k='Video'; if(t==='foto') k='Foto'; return {id:Date.now()+Math.floor(Math.random()*100000),judul:judul,nama:nama,desk:desk,kategori:k,tipe:t,link:link,linkFoto:(t==='foto'?ubahLinkDrive(link):''),komen:[],waktu:new Date().toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}; }
+async function uploadKarya(){ if(localStorage.getItem('dkv_owner_unlocked')!=='yes'){toast('🔒 Kekunci! Masukin PIN owner dulu.');return;} let link=document.getElementById('linkInput').value.trim(); let judul=document.getElementById('judulInput').value.trim()||'Tanpa Judul'; let nama=document.getElementById('namaInput').value.trim()||'Anonim - DKV'; let desk=document.getElementById('deskInput').value.trim(); if(!link){toast('Tempel link dulu!');return;} if(!link.startsWith('http')){toast('Link harus diawali http...');return;} localStorage.setItem('dkv_nama_link',nama); let btn=document.getElementById('btnUpload');btn.disabled=true;btn.innerText='⏳ Lagi Upload...'; await ambilData(); let karya=buatKarya(link,judul,nama,desk,kategori); try{ let baru=[karya,...karyaList]; await fetch(URL_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(baru)}); karyaList=baru; updateBadge(); toast('✅ Berhasil! Lagi buka halaman hasil...'); setTimeout(()=>{location.href='index.html';},800); }catch(e){toast('❌ Gagal upload. Cek internet.');btn.disabled=false;btn.innerText='UPLOAD KE HASIL';} }
+async function uploadBulk(){ if(localStorage.getItem('dkv_owner_unlocked')!=='yes'){toast('🔒 Kekunci! Masukin PIN owner dulu.');return;} let judulBase=document.getElementById('judulInput').value.trim()||'Karya DKV'; let nama=document.getElementById('namaInput').value.trim()||'Anonim - DKV'; let desk=document.getElementById('deskInput').value.trim(); let raw=document.getElementById('linksBulk').value.split('\n').map(s=>s.trim()).filter(s=>s.startsWith('http')); if(!raw.length){toast('Paste dulu link Catbox-nya di kotak BULK!');return;} localStorage.setItem('dkv_nama_link',nama); let btn=document.getElementById('btnUploadBulk');btn.disabled=true;btn.innerText='⏳ Lagi Upload '+raw.length+' karya...'; toast('⏳ Lagi upload '+raw.length+' karya...'); await ambilData(); let baruBaru=raw.map((link,i)=>{ let judul=raw.length===1?judulBase:judulBase+' '+(i+1); return buatKarya(link,judul,nama,desk,kategori); }); try{ let baru=[...baruBaru,...karyaList]; await fetch(URL_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(baru)}); karyaList=baru; updateBadge(); document.getElementById('linksBulk').value=''; toast('✅ Berhasil upload '+raw.length+' karya!'); btn.disabled=false;btn.innerText='UPLOAD SEMUA (TANPA BATAS)'; setTimeout(()=>{location.href='index.html';},800); }catch(e){toast('❌ Gagal upload. Cek internet.');btn.disabled=false;btn.innerText='UPLOAD SEMUA (TANPA BATAS)';} }
+let ln=localStorage.getItem('dkv_nama_link');if(ln)document.getElementById('namaInput').value=ln;
+ambilData();
+setInterval(async()=>{await ambilData();},15000);
+</script>
+</body>
+</html>

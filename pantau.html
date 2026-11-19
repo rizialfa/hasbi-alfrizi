@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PANTAU CHAT + UPLOAD DKV - OWNER</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#000;color:#ffe98a}
+.wrap{max-width:480px;margin:0 auto;min-height:100vh;background:linear-gradient(180deg,#2a2100,#171100,#000);display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:10px;padding:14px;background:rgba(255,215,0,.10);border-bottom:1px solid #d4af37;position:sticky;top:0;z-index:10}
+.burger{width:38px;height:38px;border-radius:8px;border:1px solid #4a4a4a;background:#1e1e1e;color:#c9a94a;cursor:pointer;font-size:18px}
+.top b{flex:1;color:#FFD700}.top b span{font-size:10px;display:block;color:#e8d5a3;letter-spacing:1px}
+.live{font-size:11px;color:#00ff88;font-weight:900}
+.box{margin:12px;background:rgba(0,0,0,.45);border:1px solid #d4af37;border-radius:20px;padding:14px}
+.hero{margin:12px 12px 0;padding:14px;border-radius:18px;background:linear-gradient(135deg,rgba(255,215,0,.22),rgba(255,184,0,.06));border:1px solid rgba(255,215,0,.5);display:flex;align-items:center;gap:12px}
+.hero .crown{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#FFD700,#FFB800);display:flex;align-items:center;justify-content:center;font-size:24px}
+.hero b{color:#FFD700;font-size:16px}.hero small{color:#e8d5a3;font-size:11px}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin:12px 0}
+.stat{background:#1a1400;border:1px solid #444;border-radius:14px;padding:10px;text-align:center}.stat b{display:block;color:#FFD700;font-size:20px}.stat small{font-size:9px;color:#e8d5a3}.stat.green{border-color:#00ff88}.stat.green b{color:#00ff88}.stat.red{border-color:#ff5555}.stat.red b{color:#ff8888}
+.status{display:flex;justify-content:space-between;align-items:center;gap:8px;background:rgba(0,0,0,.5);border:1px solid rgba(255,215,0,.3);border-radius:10px;padding:8px;font-size:11px;color:#e8d5a3;margin-bottom:10px}
+.status button{padding:6px 12px;border-radius:8px;border:1px solid #4a4a4a;background:#1e1e1e;color:#c9a94a;font-weight:700;cursor:pointer;white-space:nowrap}
+.tabs{display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap}.tabs button{flex:1;padding:9px;border-radius:8px;background:#1a1a1a;color:#9a9a9a;border:1px solid #3a3a3a;font-weight:700;font-size:11px;cursor:pointer;min-width:70px}.tabs button.on{background:#222;color:#c9a94a;border-color:#6a5a2a}
+.tabs button.onDkv{background:#FFD700!important;color:#000!important;border-color:#FFD700!important}
+.subtabs{display:flex;gap:5px;margin-bottom:10px;background:rgba(255,215,0,.08);border:1px solid rgba(255,215,0,.25);border-radius:12px;padding:6px}
+.subtabs button{flex:1;padding:10px 4px;border-radius:8px;background:#1a1a1a;color:#9a9a9a;border:1px solid #3a3a3a;font-weight:700;font-size:11px;cursor:pointer}
+.subtabs button.on{background:#FFD700;color:#000;border-color:#FFD700}
+.judul{font-size:11px;letter-spacing:2px;color:#e8d5a3;font-weight:900;padding:6px 2px 0}
+.search{display:flex;gap:6px;margin-bottom:10px}.search input{flex:1;padding:11px;border-radius:12px;background:#000;color:#fff;border:1px solid #d4af37;outline:none}.search select{padding:11px;border-radius:12px;background:#000;color:#FFD700;border:1px solid #d4af37}
+.list{display:flex;flex-direction:column;gap:10px}
+.card{background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:13px}.card.banned{border-color:#ff5555}.card.pin{border-color:#FFD700;background:linear-gradient(180deg,#2a2100,#1a1400)}.card.gold{border-color:#FFD700}
+.cardTop{display:flex;gap:11px;align-items:center}.ava{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#FFD700,#FFB800);color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:19px;position:relative;flex-shrink:0}
+.info{flex:1;min-width:0}.info b{color:#FFD700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.info small{font-size:11px;color:#e8d5a3}
+.badge{font-size:10px;font-weight:900;padding:5px 9px;border-radius:20px;white-space:nowrap}.badge.on{background:#00ff88;color:#000}.badge.off{background:#333;color:#aaa}.badge.ban{background:#ff2222;color:#fff}.badge.mute{background:#ff8800;color:#000}.badge.top{background:#FFD700;color:#000}
+.btnRow{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}.btnRow button{flex:1;padding:8px;border-radius:8px;font-weight:700;font-size:11px;cursor:pointer;border:1px solid #4a4a4a;background:#1e1e1e;color:#c9a94a}
+.btnRow button.merah{background:#2b1414!important;color:#ff8888!important;border-color:#4a2222!important}
+.btnRow button.hijau{background:#142b1a!important;color:#88ffaa!important;border-color:#224a2a!important}
+.chatItem{background:#1a1a1a;border:1px solid #333;border-radius:14px;padding:11px}.chatItem p{color:#fff;font-size:13px;margin-top:5px;white-space:pre-wrap}.chatItem.lama{border-color:#ff8800}
+.botBox{background:#1a1400;border:1px solid #d4af37;border-radius:14px;padding:12px}.botBox b{color:#FFD700;font-size:13px}.botBox p{color:#e8d5a3;font-size:11px;margin-top:6px;line-height:1.6}
+.botBox button{width:100%;padding:9px;border:1px solid #4a4a4a;border-radius:8px;font-weight:700;font-size:11px;margin-top:6px;cursor:pointer;background:#1e1e1e;color:#c9a94a}
+.botLog{margin-top:8px;font-size:11px;color:#e8d5a3;background:rgba(0,0,0,.5);border:1px solid rgba(255,215,0,.3);border-radius:10px;padding:8px;white-space:pre-wrap;max-height:120px;overflow-y:auto}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.25);border-radius:12px;padding:10px}.switch b{font-size:12px;color:#FFD700}.switch small{display:block;color:#e8d5a3;font-weight:400;font-size:10px}.switch button{flex-shrink:0;width:auto;padding:7px 14px;border-radius:20px;font-weight:900;cursor:pointer}
+input,select,textarea{width:100%;padding:11px;border-radius:12px;background:#000;color:#fff;border:1px solid #d4af37;outline:none;margin-top:6px;font-size:13px}textarea{min-height:60px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:flex-end;justify-content:center;z-index:99}.modal.show{display:flex}.mBox{width:100%;max-width:480px;background:#171100;border:1px solid #d4af37;border-radius:20px 20px 0 0;padding:16px}.mBox textarea{width:100%;padding:11px;border-radius:12px;background:#000;color:#fff;border:1px solid #d4af37;min-height:70px}
+.drawer{position:fixed;top:0;left:-300px;width:285px;height:100%;background:linear-gradient(180deg,#2a2100,#171100,#000);border-right:1px solid #d4af37;z-index:50;transition:.3s;padding:18px;overflow-y:auto}.drawer.open{left:0}.drawer a{display:flex;gap:10px;align-items:center;padding:13px 10px;color:#FFD700;text-decoration:none;border:1px solid rgba(255,215,0,.25);border-radius:12px;margin-bottom:8px;font-weight:700;background:rgba(255,215,0,.06)}.drawer a.on{background:#222;color:#c9a94a;border-color:#6a5a2a}.drawer a .dico{width:38px;height:38px;border-radius:10px;background:rgba(0,0,0,.5);border:1px solid #d4af37;display:flex;align-items:center;justify-content:center}
+.navLabel{font-size:11px;letter-spacing:2px;color:#e8d5a3;font-weight:900;padding:14px 10px 6px}
+.uploadImg{width:100%;border-radius:12px;margin-top:8px;max-height:200px;object-fit:cover;display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top"><button class="burger" onclick="document.getElementById('drawer').classList.toggle('open')">☰</button><b>PANTAU CHAT + DKV<span>OWNER • CHAT & UPLOAD DKV</span></b><span class="live" id="jam">LIVE</span></div>
+<div class="hero"><div class="crown">👁️</div><div><b>Pantau Chat + Upload DKV</b><br><small>Semua dipisah. 1 tab = 1 urusan. Gak kecampur.</small></div></div>
+<div class="box">
+<div class="stats">
+<div class="stat green"><b id="sOnline">0</b><small>ONLINE</small></div>
+<div class="stat"><b id="sChat">0</b><small>CHAT</small></div>
+<div class="stat red"><b id="sBanned">0</b><small>BANNED</small></div>
+<div class="stat"><b id="sUploadDkv">0</b><small>UPLOAD DKV</small></div>
+</div>
+<div class="status"><span id="teksKonek">⏳ Nyambung...</span><button id="btnRefresh">↻ Refresh</button></div>
+
+<!-- TAB UTAMA - DIPISAH -->
+<div class="tabs">
+<button data-tab="chat" class="on">💬 Chat</button>
+<button data-tab="banned">🚫 Banned</button>
+<button data-tab="bot">🤖 Bot 7 Hari</button>
+<button data-tab="uploadDkv">📸 Upload DKV</button>
+<button data-tab="tambah">✨ Tambahan</button>
+</div>
+
+<!-- SUB-TAB KHUSUS UPLOAD DKV - DIPISAH HASIL VS KOMEN -->
+<div class="subtabs" id="subtabsDkv" style="display:none">
+<button data-sub="ringkasanDkv" class="on">📊 Ringkasan</button>
+<button data-sub="hasilDkv">🖼️ Hasil Uploadan</button>
+<button data-sub="komenDkv">💬 Komen Uploadan</button>
+<button data-sub="topDkv">🏆 Top</button>
+</div>
+
+<div class="search"><input id="cari" placeholder="Cari nama / chat / upload DKV..." autocomplete="off"><select id="filter"><option value="all">Semua</option><option value="online">Online</option><option value="offline">Offline</option><option value="banned">Banned</option><option value="muted">Muted</option><option value="lama">Chat &gt;7 Hari</option></select></div>
+<div class="list" id="list">Lagi nyambung...</div>
+</div>
+</div>
+<div class="drawer" id="drawer"><h3 style="color:#FFD700">ALFARIZI</h3><p style="color:#e8d5a3;font-size:12px;margin:4px 0 0">MENU • OWNER ONLY</p>
+<div class="navLabel">MENU UTAMA</div>
+<a href="index.html"><span class="dico">🏠</span> Home</a>
+<a href="chat.html"><span class="dico">💬</span> Chat</a>
+<a href="upload.html"><span class="dico">🖼️</span> Owner Upload</a>
+<div class="navLabel">OWNER</div>
+<a href="pantau.html" class="on"><span class="dico">👁️</span> Pantau Chat + DKV</a>
+<a href="balas-komen.html"><span class="dico">💬</span> Balas Komen</a>
+<a href="hapus-komen.html"><span class="dico">🗑️</span> Hapus Komen</a>
+<a href="hapus-uploadan.html"><span class="dico">📷</span> Hapus Uploadan</a>
+<a href="owner-rizi.html"><span class="dico">👑</span> Chat Owner Rizi</a>
+<br><button onclick="document.getElementById('drawer').classList.remove('open')">Tutup</button></div>
+<div class="modal" id="modal"><div class="mBox"><h3 id="modalTitle" style="color:#FFD700">DM</h3><textarea id="modalPesan" placeholder="Tulis pesan owner..."></textarea><div class="btnRow"><button id="btnKirimDM">📩 Kirim DM</button><button id="btnBatalDM">Batal</button></div></div></div>
+
+<script>
+const CHAT_ID="21ba649c319a2054608c", PRESENCE_ID="71d20ec46da14819e418", BAN_ID="b35d8c7b99398ba2db31";
+const URL_CHAT="https://api.npoint.io/"+CHAT_ID;
+const URL_PRESENCE="https://api.npoint.io/"+PRESENCE_ID;
+const URL_BAN="https://api.npoint.io/"+BAN_ID;
+const TUJUH_HARI=7*24*60*60*1000;
+const OFFLINE_7_HARI_MENIT=7*24*60;
+
+const UPLOAD_DKV_ID = "43118ccd0ef279ea8490";
+const KOMEN_DKV_ID = "43118ccd0ef279ea8490";
+const URL_UPLOAD_DKV = "https://api.npoint.io/" + UPLOAD_DKV_ID;
+const URL_KOMEN_DKV = "https://api.npoint.io/" + KOMEN_DKV_ID;
+
+let tab='chat';
+let subDkv='ringkasanDkv';
+let chats=[], members={}, banned=[], muted=[];
+let uploadsDkv=[], komensDkv=[];
+let botLogChat='Bot chat 7 hari belum jalan.';
+let botLogUser='Bot pengguna 7 hari belum jalan.';
+let botLogTambah='Auto-balas & Welcome siap.';
+let targetDM='';
+let lagiCek=false, lagiBot=false;
+let nomorWA = localStorage.getItem('pantau_nomor_wa') || "";
+let botChatOn = localStorage.getItem('pantau_bot_chat7')!=='off';
+let botUserOn = localStorage.getItem('pantau_bot_user7')!=='off';
+let autoBalasOn = localStorage.getItem('pantau_auto_balas')!=='off';
+let welcomeOn = localStorage.getItem('pantau_welcome')!=='off';
+
+const load=(k,def)=>{ try{ const v=localStorage.getItem(k); return v===null?def:JSON.parse(v); }catch(e){ return def; } };
+const save=(k,v)=>{ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} };
+const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const isOnline=m=>{ const ts=Number(m.lastSeen)||0; return ts && (Date.now()-ts)<60000; };
+const menitOff=m=>{ const ts=Number(m.lastSeen)||0; if(!ts) return 999999; return Math.floor((Date.now()-ts)/60000); };
+const fmt=ts=>{ ts=Number(ts)||0; if(!ts) return 'Belum pernah'; const d=Math.floor((Date.now()-ts)/1000); if(d<60) return 'Baru aja'; if(d<3600) return Math.floor(d/60)+' mnt lalu'; if(d<86400) return Math.floor(d/3600)+' jam lalu'; return Math.floor(d/86400)+' hari lalu'; };
+const setStatus=t=>{ const el=document.getElementById('teksKonek'); if(el) el.textContent=t; };
+
+let aturanBalas = load('bot_aturan', [
+  {kata:'halo', balas:'Halo juga! 👋 Ada yang bisa dibantu?'},
+  {kata:'harga', balas:'Buat harga, langsung DM Owner ya! 👑'},
+  {kata:'makasih', balas:'Sama-sama! 🙏 Makasih udah mampir.'},
+  {kata:'bot', balas:'Iya, gua Bot Alfarizi 🤖'}
+]);
+let pinText = load('pantau_pin', 'Halo semua! 👋 Selamat datang di komunitas Alfarizi. Baca aturan, jangan spam, saling hargai ya! 🔥');
+let sudahWelcome = load('pantau_sudah_welcome', {});
+let sudahBalasId = load('pantau_sudah_balas', []);
+
+function umurChat(c){
+  const id=Number(c.id)||0;
+  if(id>1000000000000) return Date.now()-id;
+  const t=Date.parse(c.time||'');
+  if(!isNaN(t)) return Date.now()-t;
+  return 0;
+}
+function chatTua(){ return chats.filter(c=>!c.isSystem && umurChat(c)>TUJUH_HARI); }
+function userOffline7Hari(){ return Object.values(members).filter(m=>!isOnline(m) && menitOff(m)>=OFFLINE_7_HARI_MENIT); }
+function topKomen(){
+  const h={}; chats.forEach(c=>{ if(c.nama) h[c.nama]=(h[c.nama]||0)+1; });
+  return Object.keys(h).sort((a,b)=>h[b]-h[a]).slice(0,3).map(n=>({nama:n, total:h[n]}));
+}
+function komenBuatUpload(uploadId){
+  const dariDalam = [];
+  uploadsDkv.forEach(u=>{ if(String(u.id)===String(uploadId)){ (u.komen||u.comments||u.komentar||[]).forEach(k=> dariDalam.push(k)); } });
+  const dariLuar = komensDkv.filter(k=> String(k.uploadId||k.idUpload||k.postId||k.upload_id||'')===String(uploadId));
+  return [...dariDalam, ...dariLuar];
+}
+function semuaKomenDkv(){
+  let semua=[];
+  uploadsDkv.forEach(u=>{ (u.komen||u.comments||u.komentar||[]).forEach(k=> semua.push({...k, uploadJudul: u.judul||u.title||u.caption||'Uploadan', uploadId: u.id, uploader: u.nama||u.uploader||u.author})); });
+  komensDkv.forEach(k=> semua.push(k));
+  return semua;
+}
+function statistikDkv(){
+  const semuaKomen = semuaKomenDkv();
+  const hitungKomen = {};
+  semuaKomen.forEach(k=>{ if(k.nama) hitungKomen[k.nama]=(hitungKomen[k.nama]||0)+1; });
+  const hitungUpload = {};
+  uploadsDkv.forEach(u=>{ const n=u.nama||u.uploader||u.author||'Tanpa Nama'; hitungUpload[n]=(hitungUpload[n]||0)+1; });
+  const topKomenDkv = Object.keys(hitungKomen).sort((a,b)=>hitungKomen[b]-hitungKomen[a]).slice(0,5).map(n=>({nama:n, total:hitungKomen[n]}));
+  const topUploadDkv = Object.keys(hitungUpload).sort((a,b)=>hitungUpload[b]-hitungUpload[a]).slice(0,5).map(n=>({nama:n, total:hitungUpload[n]}));
+  const uploadPalingRame = uploadsDkv.map(u=>({ id:u.id, judul:u.judul||u.title||u.caption||'Uploadan', nama:u.nama||u.uploader||u.author||'-', totalKomen: komenBuatUpload(u.id).length, like: Number(u.like||u.likes||u.suka||0), gambar:u.gambar||u.image||u.foto||u.url||'' })).sort((a,b)=>b.totalKomen-a.totalKomen).slice(0,3);
+  const orangKomenDkv = Object.keys(hitungKomen).length;
+  return { semuaKomen, hitungKomen, hitungUpload, topKomenDkv, topUploadDkv, uploadPalingRame, orangKomenDkv, totalLikeDkv: uploadsDkv.reduce((a,u)=>a+Number(u.like||u.likes||u.suka||0),0) };
+}
+async function ambilJSON(url){
+  const ctrl=new AbortController();
+  const timer=setTimeout(()=>ctrl.abort(), 5000);
+  try{ const r=await fetch(url,{signal:ctrl.signal}); clearTimeout(timer); if(!r.ok) return null; return await r.json(); }catch(e){ clearTimeout(timer); return null; }
+}
+function olahData(cBaru, pBaru, bBaru){
+  if(Array.isArray(cBaru)) chats=cBaru;
+  if(Array.isArray(pBaru)){
+    const baru={};
+    pBaru.forEach(p=>{ if(!p.nama) return; baru[p.nama]={nama:p.nama, lastSeen:Number(p.lastSeen)||0, lastPage:p.page||'Chat'}; });
+    members=baru;
+  }
+  if(bBaru){ banned=bBaru.banned||[]; muted=bBaru.muted||[]; }
+  chats.forEach(c=>{ if(c.nama && members[c.nama] && c.teks) members[c.nama].lastChat=c.teks; });
+  Object.values(members).forEach(m=>{ m.total=chats.filter(c=>c.nama===m.nama).length; });
+  save('pantau_cache_chats', chats.slice(-200));
+  save('pantau_cache_members', members);
+  save('pantau_cache_ban', {banned, muted});
+}
+function tampilkanStats(){
+  const on=Object.values(members).filter(isOnline);
+  document.getElementById('sOnline').textContent=on.length;
+  document.getElementById('sChat').textContent=chats.length;
+  document.getElementById('sBanned').textContent=banned.length;
+  document.getElementById('sUploadDkv').textContent=uploadsDkv.length;
+  document.getElementById('jam').textContent=new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+}
+async function cek(manual=false){
+  if(lagiCek) return;
+  if(!manual && document.hidden) return;
+  lagiCek=true;
+  if(manual) setStatus('⏳ Lagi refresh...');
+  const mulai=Date.now();
+  const [c,p,b,u,k] = await Promise.all([ambilJSON(URL_CHAT), ambilJSON(URL_PRESENCE), ambilJSON(URL_BAN), ambilJSON(URL_UPLOAD_DKV), ambilJSON(URL_KOMEN_DKV)]);
+  if(c!==null || p!==null || b!==null){
+    const jumlahSebelum=chats.length;
+    olahData(c,p,b);
+    if(Array.isArray(u)) uploadsDkv=u;
+    if(Array.isArray(k)) komensDkv=k;
+    if(URL_KOMEN_DKV===URL_UPLOAD_DKV) komensDkv=[];
+    tampilkanStats();
+    setStatus('✅ Tersambung • '+(Date.now()-mulai)+'ms • '+new Date().toLocaleTimeString('id-ID'));
+    if(chats.length>jumlahSebelum) jalaninAutoBalasDanWelcome();
+  } else { setStatus('⚠️ Gagal nyambung, pake data terakhir'); }
+  lagiCek=false;
+  render();
+  jalaninBotOtomatis();
+}
+function loadCacheAwal(){
+  const c=load('pantau_cache_chats', null);
+  const m=load('pantau_cache_members', null);
+  const b=load('pantau_cache_ban', null);
+  if(Array.isArray(c) && c.length) chats=c;
+  if(m && typeof m==='object') members=m;
+  if(b){ banned=b.banned||[]; muted=b.muted||[]; }
+  if(chats.length || Object.keys(members).length){ tampilkanStats(); setStatus('📦 Data terakhir dimuat • Lagi nyambung...'); render(); }
+}
+async function botHapusChat7Hari(manual=false){
+  const tua=chatTua();
+  if(!tua.length){ botLogChat='✅ Cek '+new Date().toLocaleTimeString('id-ID')+' : Aman, gak ada chat lewat 7 hari.'; render(); return 0; }
+  if(manual && !confirm('Hapus '+tua.length+' chat yang udah lewat 7 hari?')) return 0;
+  const ids=new Set(tua.map(c=>String(c.id)));
+  const sisa=chats.filter(c=>!ids.has(String(c.id)));
+  try{ await fetch(URL_CHAT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(sisa)}); chats=sisa; botLogChat='🧹 BOT hapus '+tua.length+' chat lewat 7 hari • '+new Date().toLocaleTimeString('id-ID'); }catch(e){ botLogChat='❌ Gagal hapus chat 7 hari.'; }
+  render(); return tua.length;
+}
+async function botHapusUser7Hari(manual=false){
+  const t=userOffline7Hari();
+  if(!t.length){ botLogUser='✅ Cek '+new Date().toLocaleTimeString('id-ID')+' : Aman, gak ada member offline 7 hari.'; render(); return 0; }
+  if(manual && !confirm('Hapus '+t.length+' member offline 7 hari?\n\n'+t.map(m=>m.nama).slice(0,5).join(', ')+'\n\nChat-nya TETAP.')) return 0;
+  const namaList=t.map(m=>m.nama).join(', ');
+  const set=new Set(t.map(m=>m.nama));
+  try{ const p=await ambilJSON(URL_PRESENCE) || []; const baru=p.filter(x=>!set.has(x.nama)); await fetch(URL_PRESENCE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(baru)}); t.forEach(m=>delete members[m.nama]); botLogUser='🧹 BOT hapus '+t.length+' member offline 7 hari ('+namaList+') • Chat TETAP • '+new Date().toLocaleTimeString('id-ID'); }catch(e){ botLogUser='❌ Gagal hapus member 7 hari.'; }
+  render(); return t.length;
+}
+let terakhirBot=0;
+async function jalaninBotOtomatis(){
+  if(lagiBot) return;
+  if(Date.now()-terakhirBot < 60000) return;
+  terakhirBot=Date.now(); lagiBot=true;
+  if(botChatOn) await botHapusChat7Hari(false);
+  if(botUserOn) await botHapusUser7Hari(false);
+  lagiBot=false;
+}
+async function jalaninAutoBalasDanWelcome(){
+  if(!autoBalasOn && !welcomeOn) return;
+  const baru=chats.slice(-10);
+  let perluKirim=[];
+  for(const c of baru){
+    if(!c.nama || c.isSystem || c.isOwner) continue;
+    if(banned.includes(c.nama) || muted.includes(c.nama)) continue;
+    const idStr=String(c.id);
+    if(autoBalasOn && !sudahBalasId.includes(idStr)){
+      const teksLower=String(c.teks||'').toLowerCase();
+      const aturan=aturanBalas.find(a=>teksLower.includes(a.kata.toLowerCase()));
+      if(aturan){ perluKirim.push({id:Date.now()+Math.floor(Math.random()*1000), nama:'BOT 🤖', teks:'@'+c.nama+' : '+aturan.balas, time:new Date().toLocaleString('id-ID'), isSystem:true}); sudahBalasId.push(idStr); }
+    }
+    if(welcomeOn && !sudahWelcome[c.nama] && members[c.nama]){
+      sudahWelcome[c.nama]=true;
+      perluKirim.push({id:Date.now()+Math.floor(Math.random()*1000)+1, nama:'BOT 👋', teks:'Selamat datang @'+c.nama+'! 🎉 Selamat datang di komunitas Alfarizi.', time:new Date().toLocaleString('id-ID'), isSystem:true});
+    }
+  }
+  if(!perluKirim.length) return;
+  sudahBalasId=sudahBalasId.slice(-100);
+  save('pantau_sudah_balas', sudahBalasId);
+  save('pantau_sudah_welcome', sudahWelcome);
+  try{ const d=await ambilJSON(URL_CHAT) || []; const gabung=[...d, ...perluKirim]; await fetch(URL_CHAT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(gabung)}); botLogTambah='🤖 Bot kirim '+perluKirim.length+' balasan otomatis • '+new Date().toLocaleTimeString('id-ID'); }catch(e){}
+}
+async function simpanBan(){ await fetch(URL_BAN,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({banned, muted})}); }
+async function banUser(nama){ if(!confirm('BAN '+nama+'?')) return; if(!banned.includes(nama)) banned.push(nama); await simpanBan(); alert(nama+' udah di-BAN!'); cek(true); }
+async function muteUser(nama){ if(!confirm('MUTE '+nama+'?')) return; if(!muted.includes(nama)) muted.push(nama); await simpanBan(); alert(nama+' udah di-MUTE!'); cek(true); }
+async function unbanUser(nama){ banned=banned.filter(x=>x!==nama); await simpanBan(); cek(true); }
+async function unmuteUser(nama){ muted=muted.filter(x=>x!==nama); await simpanBan(); cek(true); }
+async function postChat(data){ await fetch(URL_CHAT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); }
+async function kirimDM(){
+  const teks=document.getElementById('modalPesan').value.trim();
+  if(!teks) return;
+  document.getElementById('modal').classList.remove('show');
+  document.getElementById('modalPesan').value='';
+  const d=await ambilJSON(URL_CHAT) || [];
+  d.push({id:Date.now(),nama:'Owner',teks:'@'+targetDM+' : '+teks,time:new Date().toLocaleString('id-ID'),isOwner:true,to:targetDM});
+  await postChat(d); alert('DM terkirim!'); cek(true);
+}
+async function hapusChatSatu(id){ if(!confirm('Hapus chat ini?')) return; const d=await ambilJSON(URL_CHAT) || []; await postChat(d.filter(x=>String(x.id)!==String(id))); cek(true); }
+async function hapusSemuaChatUser(nama){ if(!confirm('Hapus SEMUA chat dari '+nama+'?')) return; const d=await ambilJSON(URL_CHAT) || []; await postChat(d.filter(x=>x.nama!==nama)); cek(true); }
+function teksLaporan(){
+  const sDkv=statistikDkv();
+  const unik={}; chats.forEach(c=>{ if(c.nama) unik[c.nama]=1; });
+  const hitung={}; chats.forEach(c=>{ if(c.nama) hitung[c.nama]=(hitung[c.nama]||0)+1; });
+  let teks='LAPORAN PANTAU CHAT + UPLOAD DKV - ALFARIZI\nTanggal: '+new Date().toLocaleString('id-ID')+'\n\n[CHAT]\nTotal Chat: '+chats.length+'\nOrang chat: '+Object.keys(unik).length+'\nOnline: '+Object.values(members).filter(isOnline).length+'\nBanned: '+(banned.length?banned.join(', '):'0')+'\n\n[UPLOAD DKV]\nTotal Upload DKV: '+uploadsDkv.length+'\nTotal Komen DKV: '+sDkv.semuaKomen.length+'\nOrang Komen DKV: '+sDkv.orangKomenDkv+'\nTotal Like DKV: '+sDkv.totalLikeDkv+'\n\nTOP KOMEN DKV:\n';
+  sDkv.topKomenDkv.forEach((t,i)=>{ teks+=(i+1)+'. '+t.nama+' - '+t.total+' komen\n'; });
+  return teks;
+}
+function downloadLaporan(){ const blob=new Blob([teksLaporan()],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='laporan-pantau-chat-dkv.txt'; a.click(); botLogTambah='📥 Laporan udah di-download!'; render(); }
+function kirimLaporanWA(){
+  if(!nomorWA){ const isi=prompt('Nomor WA lu berapa?\nFormat: 62 + nomor tanpa 0\nContoh: 6281234567890'); if(!isi) return; nomorWA=isi.trim().replace(/[^0-9]/g,''); localStorage.setItem('pantau_nomor_wa', nomorWA); }
+  const url='https://wa.me/'+nomorWA+'?text='+encodeURIComponent(teksLaporan());
+  window.open(url,'_blank');
+}
+function filteredChat(){
+  const cari=(document.getElementById('cari').value||'').toLowerCase();
+  const f=document.getElementById('filter').value;
+  let arr=chats.slice().reverse();
+  if(cari) arr=arr.filter(c=>String(c.teks||'').toLowerCase().includes(cari) || String(c.nama||'').toLowerCase().includes(cari));
+  if(f==='banned') arr=arr.filter(c=>banned.includes(c.nama));
+  if(f==='muted') arr=arr.filter(c=>muted.includes(c.nama));
+  if(f==='online') arr=arr.filter(c=>members[c.nama] && isOnline(members[c.nama]));
+  if(f==='offline') arr=arr.filter(c=>members[c.nama] && !isOnline(members[c.nama]));
+  if(f==='lama') arr=arr.filter(c=>umurChat(c)>TUJUH_HARI);
+  return arr.slice(0,30);
+}
+
+// === RENDER - SEMUA DIPISAH ===
+function render(){
+  const list=document.getElementById('list');
+  if(!list) return;
+  document.getElementById('subtabsDkv').style.display = tab==='uploadDkv' ? 'flex' : 'none';
+
+  // ----- 1. UPLOAD DKV - DIPISAH 4 -----
+  if(tab==='uploadDkv'){
+    const s=statistikDkv();
+    const cari=(document.getElementById('cari').value||'').toLowerCase();
+
+    // A. RINGKASAN - CUMA ANGKA
+    if(subDkv==='ringkasanDkv'){
+      list.innerHTML =
+      '<div class="judul">📊 RINGKASAN UPLOAD DKV - CUMA ANGKA</div>' +
+      '<div class="card gold"><b style="color:#FFD700">🖼️ TOTAL UPLOAD DKV</b><p style="font-size:28px;color:#FFD700;font-weight:900">'+uploadsDkv.length+' uploadan</p></div>' +
+      '<div class="card"><b style="color:#FFD700">💬 TOTAL KOMEN DI UPLOAD DKV</b><p style="font-size:28px;color:#FFD700;font-weight:900">'+s.semuaKomen.length+' komen</p></div>' +
+      '<div class="card"><b style="color:#FFD700">🙋 ORANG YANG KOMEN DI UPLOAD DKV</b><p style="font-size:28px;color:#FFD700;font-weight:900">'+s.orangKomenDkv+' orang</p></div>' +
+      '<div class="card"><b style="color:#FFD700">❤️ TOTAL LIKE DI UPLOAD DKV</b><p style="font-size:28px;color:#FFD700;font-weight:900">'+s.totalLikeDkv+' like</p></div>' +
+      '<div class="card"><p style="color:#e8d5a3;font-size:11px">Mau liat detail uploadan-nya? Pencet <b>🖼️ Hasil Uploadan</b> di atas.<br>Mau liat komen-nya doang? Pencet <b>💬 Komen Uploadan</b>.</p></div>';
+      return;
+    }
+
+    // B. HASIL UPLOADAN - CUMA UPLOADAN, GAK ADA KOMEN
+    if(subDkv==='hasilDkv'){
+      let arr = uploadsDkv.slice().reverse();
+      if(cari) arr = arr.filter(u=> String(u.judul||u.title||u.caption||'').toLowerCase().includes(cari) || String(u.nama||u.uploader||'').toLowerCase().includes(cari));
+      arr = arr.slice(0,10);
+      list.innerHTML = '<div class="judul">🖼️ HASIL UPLOADAN DKV - CUMA UPLOADAN, GAK ADA KOMEN</div>' +
+      (arr.length ? arr.map(u=>{
+        const komen = komenBuatUpload(u.id);
+        const gambar = u.gambar||u.image||u.foto||u.url||'';
+        return '<div class="card gold"><div class="cardTop"><div class="ava">'+esc(((u.nama||u.uploader||'?')[0]||'?').toUpperCase())+'</div><div class="info"><b>'+esc(u.nama||u.uploader||u.author||'Tanpa Nama')+'</b><small>📸 Upload DKV • '+(u.time||u.tanggal||'')+'</small></div><span class="badge top">💬 '+komen.length+' • ❤️ '+(u.like||u.likes||0)+'</span></div>' +
+        '<p style="color:#fff;font-size:13px;margin-top:8px;white-space:pre-wrap">'+esc(u.judul||u.title||u.caption||'')+'</p>' +
+        (u.deskripsi?'<p style="color:#e8d5a3;font-size:11px;margin-top:4px;white-space:pre-wrap">'+esc(u.deskripsi)+'</p>':'') +
+        (gambar?'<img class="uploadImg" src="'+esc(gambar)+'">':'') +
+        '<p style="color:#888;font-size:11px;margin-top:8px">Komen-nya gak ditampilin di sini. Mau liat komen? Pencet tab 💬 Komen Uploadan.</p></div>';
+      }).join('') : '<div class="card"><p style="color:#e8d5a3;font-size:11px">Belum ada uploadan DKV.</p></div>');
+      return;
+    }
+
+    // C. KOMEN UPLOADAN - CUMA KOMEN, GAK ADA UPLOADAN
+    if(subDkv==='komenDkv'){
+      let semua = semuaKomenDkv().slice().reverse();
+      if(cari) semua = semua.filter(k=> String(k.teks||k.komen||k.comment||'').toLowerCase().includes(cari) || String(k.nama||'').toLowerCase().includes(cari) || String(k.uploadJudul||'').toLowerCase().includes(cari));
+      semua = semua.slice(0,20);
+      list.innerHTML = '<div class="judul">💬 KOMEN DI UPLOAD DKV - CUMA KOMEN, GAK ADA UPLOADAN</div>' +
+      (semua.length ? semua.map(k=> '<div class="chatItem"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="color:#FFD700">'+esc(k.nama)+'</b><span class="badge top">di: '+esc((k.uploadJudul||'Uploadan').slice(0,20))+'</span></div><small style="color:#888">'+esc(k.time||'')+'</small><p>'+esc(k.teks||k.komen||k.comment||'')+'</p></div>').join('') : '<div class="card"><p style="color:#e8d5a3;font-size:11px">Belum ada komen di uploadan DKV.</p></div>');
+      return;
+    }
+
+    // D. TOP - CUMA SIAPA PALING BANYAK
+    if(subDkv==='topDkv'){
+      list.innerHTML =
+      '<div class="judul">🏆 TOP - SIAPA PALING BANYAK?</div>' +
+      '<div class="card"><b style="color:#FFD700">🏆 TOP UPLOAD DKV - SIAPA PALING BANYAK UPLOAD</b><p style="color:#e8d5a3;font-size:11px;margin-top:6px;line-height:1.8">'+(s.topUploadDkv.map((t,i)=>'<span class="badge top">#'+(i+1)+'</span> '+esc(t.nama)+' — '+t.total+' upload').join('<br>')||'Belum ada data')+'</p></div>' +
+      '<div class="card"><b style="color:#FFD700">🏆 TOP KOMEN DKV - SIAPA PALING BANYAK KOMEN</b><p style="color:#e8d5a3;font-size:11px;margin-top:6px;line-height:1.8">'+(s.topKomenDkv.map((t,i)=>'<span class="badge top">#'+(i+1)+'</span> '+esc(t.nama)+' — '+t.total+' komen').join('<br>')||'Belum ada data')+'</p></div>' +
+      '<div class="card"><b style="color:#FFD700">🔥 UPLOAD DKV PALING RAME KOMEN-NYA</b><p style="color:#e8d5a3;font-size:11px;margin-top:6px;line-height:1.8">'+(s.uploadPalingRame.map((u,i)=>'<span class="badge top">#'+(i+1)+'</span> '+esc(u.judul)+' (by '+esc(u.nama)+') — '+u.totalKomen+' komen • ❤️ '+u.like).join('<br>')||'Belum ada data')+'</p></div>';
+      return;
+    }
+    return;
+  }
+
+  // ----- 2. BANNED -----
+  if(tab==='banned'){
+    const isiBanned=banned.length?banned.map(n=>{ const m=members[n]; return '<div class="card banned"><div class="cardTop"><div class="ava">'+esc((n||'?')[0].toUpperCase())+'</div><div class="info"><b>'+esc(n)+'</b><small>🚫 Di-BAN • '+(m?'Offline - '+fmt(m.lastSeen):'Gak ada di presence')+'</small></div><span class="badge ban">BANNED</span></div><div class="btnRow"><button class="hijau" data-act="unban" data-nama="'+esc(n)+'">✅ Unban</button><button data-act="dm" data-nama="'+esc(n)+'">DM</button></div></div>'; }).join(''):'<div class="card"><p style="color:#e8d5a3;font-size:11px">Belum ada yang di-ban. Bersih! ✅</p></div>';
+    const isiMuted=muted.length?muted.map(n=>{ const m=members[n]; return '<div class="card"><div class="cardTop"><div class="ava">'+esc((n||'?')[0].toUpperCase())+'</div><div class="info"><b>'+esc(n)+'</b><small>🔇 Di-MUTE • '+(m?'Offline - '+fmt(m.lastSeen):'Gak ada di presence')+'</small></div><span class="badge mute">MUTED</span></div><div class="btnRow"><button class="hijau" data-act="unmute" data-nama="'+esc(n)+'">✅ Unmute</button><button data-act="dm" data-nama="'+esc(n)+'">DM</button></div></div>'; }).join(''):'<div class="card"><p style="color:#e8d5a3;font-size:11px">Belum ada yang di-mute. Bersih! ✅</p></div>';
+    list.innerHTML='<div class="judul">🚫 BANNED & MUTED - DIPISAH</div><div class="card"><b style="color:#ff8888">🚫 BANNED ('+banned.length+')</b></div>'+isiBanned+'<div class="card"><b style="color:#ffaa00">🔇 MUTED ('+muted.length+')</b></div>'+isiMuted;
+    return;
+  }
+  // ----- 3. BOT -----
+  if(tab==='bot'){
+    const tua=chatTua(); const off7=userOffline7Hari();
+    list.innerHTML=
+    '<div class="judul">🤖 BOT 7 HARI - DIPISAH</div>'+
+    '<div class="botBox"><b>🤖 BOT 1 — HAPUS CHAT 7 HARI</b><p>Chat &gt;7 hari: <b>'+tua.length+' chat</b> • Total: '+chats.length+'<br>Status: <b>'+(botChatOn?'ON ✅':'OFF ⏸️')+'</b><br>Member-nya TETAP, cuma chat-nya yang dihapus.</p><button data-act="toggle-bot-chat">'+(botChatOn?'⏸ MATIIN BOT CHAT':'▶ NYALAIN BOT CHAT')+'</button><button data-act="jalan-chat">🧹 Hapus Chat &gt;7 Hari Sekarang</button><div class="botLog">'+esc(botLogChat)+'</div></div>'+
+    '<div class="botBox"><b>🤖 BOT 2 — HAPUS PENGGUNA OFFLINE 7 HARI</b><p>Member offline 7 hari: <b>'+off7.length+' orang</b> • Total: '+Object.keys(members).length+'<br>Orang-nya: '+(off7.map(m=>m.nama).join(', ')||'-')+'<br>Status: <b>'+(botUserOn?'ON ✅':'OFF ⏸️')+'</b><br>Chat-nya TETAP, cuma member-nya yang dihapus.</p><button data-act="toggle-bot-user">'+(botUserOn?'⏸ MATIIN BOT USER':'▶ NYALAIN BOT USER')+'</button><button data-act="jalan-user">🧹 Hapus Member Offline 7 Hari Sekarang</button><div class="botLog">'+esc(botLogUser)+'</div></div>';
+    return;
+  }
+  // ----- 4. TAMBAHAN -----
+  if(tab==='tambah'){
+    const top=topKomen(); const swAuto=autoBalasOn?'ON ✅':'OFF ⏸️'; const swWelcome=welcomeOn?'ON ✅':'OFF ⏸️';
+    list.innerHTML=
+    '<div class="judul">✨ TAMBAHAN - DIPISAH</div>'+
+    '<div class="card pin"><b style="color:#FFD700">📌 PIN PENGUMUMAN</b><p style="color:#e8d5a3;font-size:11px;margin-top:4px">Pin nempel di atas tab Chat, gak ketimbun.</p><textarea id="inputPin">'+esc(pinText)+'</textarea><div class="btnRow"><button data-act="simpan-pin">💾 Simpan Pin</button><button data-act="kirim-pin">📢 Kirim Pin ke Chat</button></div></div>'+
+    '<div class="botBox"><b>🤖 AUTO-BALAS</b><p>Status: <b>'+swAuto+'</b></p><div class="switch"><div><b>Bot Auto-Balas</b><small>ON = bot bales otomatis</small></div><button data-act="toggle-auto">'+swAuto+'</button></div><p style="margin-top:10px"><b>Aturan ('+aturanBalas.length+'):</b></p>'+aturanBalas.map((a,i)=>'<div style="background:rgba(0,0,0,.5);border:1px solid rgba(255,215,0,.3);border-radius:10px;padding:8px;margin-top:6px;font-size:11px;color:#e8d5a3">Kalo ada: <b>"'+esc(a.kata)+'"</b><br>Bot bales: '+esc(a.balas)+'<br><button data-act="hapus-aturan" data-i="'+i+'" style="width:auto;padding:5px 10px;margin-top:4px;background:#2b1414;color:#ff8888;border:1px solid #4a2222;border-radius:8px;cursor:pointer">Hapus</button></div>').join('')+'<p style="margin-top:10px"><b>Tambah Aturan:</b></p><input id="baruKata" placeholder="Kata kunci... contoh: halo"><textarea id="baruBalas" placeholder="Bot bales apa..."></textarea><div class="btnRow"><button data-act="tambah-aturan">➕ Tambah Aturan</button></div></div>'+
+    '<div class="botBox"><b>👋 WELCOME OTOMATIS</b><p>Status: <b>'+swWelcome+'</b></p><div class="switch"><div><b>Bot Welcome</b><small>ON = sapa orang baru sekali aja</small></div><button data-act="toggle-welcome">'+swWelcome+'</button></div><div class="botLog">'+esc(botLogTambah)+'</div></div>'+
+    '<div class="card"><b style="color:#FFD700">🏆 TOP KOMEN CHAT</b><p style="color:#e8d5a3;font-size:11px;margin-top:6px;line-height:1.8">'+(top.map((t,i)=>'<span class="badge top">#'+(i+1)+'</span> '+esc(t.nama)+' — '+t.total+' chat').join('<br>')||'Belum ada data')+'</p></div>'+
+    '<div class="card"><b style="color:#FFD700">📥 LAPORAN + WA</b><p style="color:#e8d5a3;font-size:11px;margin-top:4px">Nomor WA lu: <b>'+(nomorWA||'Belum diisi')+'</b></p><div class="btnRow"><button data-act="download-laporan">📥 Download Laporan (.txt)</button><button data-act="kirim-wa">📲 Kirim Laporan ke WA Gua</button></div><div class="btnRow"><button data-act="ganti-nomor-wa">✏️ Ganti Nomor WA</button></div></div>';
+    return;
+  }
+  // ----- 5. CHAT -----
+  const top=topKomen(); const arr=filteredChat();
+  const pinHtml='<div class="card pin"><b style="color:#FFD700">📌 '+esc(pinText)+'</b></div>';
+  const topHtml='<div class="card"><b style="color:#FFD700">🏆 TOP 3 PALING AKTIF DI CHAT</b><p style="color:#e8d5a3;font-size:11px;margin-top:4px">'+(top.map((t,i)=>'<span class="badge top">#'+(i+1)+'</span> '+esc(t.nama)+' ('+t.total+')').join(' • ')||'Belum ada data')+'</p></div>';
+  const chatHtml=arr.length?arr.map(c=>{ const m=members[c.nama]; const on=m?isOnline(m):false; const isBanned=banned.includes(c.nama); const isMuted=muted.includes(c.nama); const lama=umurChat(c)>TUJUH_HARI; const badge=isBanned?'<span class="badge ban">BANNED</span>':isMuted?'<span class="badge mute">MUTED</span>':on?'<span class="badge on">ONLINE</span>':'<span class="badge off">OFFLINE</span>'; return '<div class="chatItem '+(lama?'lama':'')+'"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b style="color:#FFD700">'+esc(c.nama)+'</b>'+badge+'</div><small style="color:#888">'+esc(c.time||'')+(lama?' • ⚠️ Lewat 7 hari, bakal dihapus Bot 1':'')+'</small><p>'+esc(c.teks||'')+'</p><div class="btnRow"><button data-act="dm" data-nama="'+esc(c.nama)+'">DM</button><button class="merah" data-act="ban" data-nama="'+esc(c.nama)+'">🚫 Ban</button><button data-act="mute" data-nama="'+esc(c.nama)+'">🔇 Mute</button><button data-act="hapus-chat-user" data-nama="'+esc(c.nama)+'">Hapus Chatnya</button><button class="merah" data-act="hapus-satu" data-id="'+esc(c.id)+'">🗑️ Hapus Ini</button></div></div>'; }).join(''):'<div class="card"><p style="color:#e8d5a3;font-size:11px">Belum ada chat.</p></div>';
+  list.innerHTML=pinHtml+topHtml+'<div class="card"><b style="color:#FFD700">💬 PANTAU CHAT</b><p style="color:#e8d5a3;font-size:11px;margin-top:4px">Total: <b>'+chats.length+'</b> • Chat lama: <b>'+chatTua().length+'</b> • Offline 7 hari: <b>'+userOffline7Hari().length+'</b></p></div>'+chatHtml;
+}
+document.addEventListener('click', async (e)=>{
+  const btnTab=e.target.closest('button[data-tab]');
+  if(btnTab){
+    tab=btnTab.dataset.tab;
+    if(tab==='uploadDkv') subDkv='ringkasanDkv';
+    document.querySelectorAll('.tabs button').forEach(b=>{
+      b.classList.toggle('on', b.dataset.tab===tab);
+      b.classList.toggle('onDkv', tab==='uploadDkv' && b.dataset.tab==='uploadDkv');
+    });
+    document.querySelectorAll('#subtabsDkv button').forEach(b=> b.classList.toggle('on', b.dataset.sub===subDkv));
+    render(); return;
+  }
+  const btnSub=e.target.closest('button[data-sub]');
+  if(btnSub){
+    subDkv=btnSub.dataset.sub;
+    document.querySelectorAll('#subtabsDkv button').forEach(b=> b.classList.toggle('on', b.dataset.sub===subDkv));
+    render(); return;
+  }
+  const btn=e.target.closest('button');
+  if(!btn) return;
+  const act=btn.dataset.act; if(!act) return; const nama=btn.dataset.nama;
+  if(act==='dm'){ targetDM=nama; document.getElementById('modalTitle').textContent='DM ke '+nama; document.getElementById('modalPesan').value=''; document.getElementById('modal').classList.add('show'); }
+  else if(act==='ban') banUser(nama);
+  else if(act==='mute') muteUser(nama);
+  else if(act==='unban') unbanUser(nama);
+  else if(act==='unmute') unmuteUser(nama);
+  else if(act==='hapus-satu') hapusChatSatu(btn.dataset.id);
+  else if(act==='hapus-chat-user') hapusSemuaChatUser(nama);
+  else if(act==='toggle-bot-chat'){ botChatOn=!botChatOn; localStorage.setItem('pantau_bot_chat7', botChatOn?'on':'off'); botLogChat=botChatOn?'✅ Bot chat ON.':'⏸️ Bot chat OFF.'; render(); }
+  else if(act==='toggle-bot-user'){ botUserOn=!botUserOn; localStorage.setItem('pantau_bot_user7', botUserOn?'on':'off'); botLogUser=botUserOn?'✅ Bot user ON.':'⏸️ Bot user OFF.'; render(); }
+  else if(act==='jalan-chat') botHapusChat7Hari(true);
+  else if(act==='jalan-user') botHapusUser7Hari(true);
+  else if(act==='toggle-auto'){ autoBalasOn=!autoBalasOn; localStorage.setItem('pantau_auto_balas', autoBalasOn?'on':'off'); botLogTambah='Auto-balas '+(autoBalasOn?'ON ✅':'OFF ⏸️'); render(); }
+  else if(act==='toggle-welcome'){ welcomeOn=!welcomeOn; localStorage.setItem('pantau_welcome', welcomeOn?'on':'off'); botLogTambah='Welcome '+(welcomeOn?'ON ✅':'OFF ⏸️'); render(); }
+  else if(act==='tambah-aturan'){ const k=document.getElementById('baruKata'); const b=document.getElementById('baruBalas'); if(!k||!b) return; const kata=k.value.trim().toLowerCase(); const balas=b.value.trim(); if(!kata||!balas) return alert('Isi kata kunci + balasannya dulu!'); aturanBalas.push({kata, balas}); save('bot_aturan', aturanBalas); botLogTambah='✅ Aturan baru: "'+kata+'"'; render(); }
+  else if(act==='hapus-aturan'){ if(!confirm('Hapus aturan ini?')) return; aturanBalas.splice(Number(btn.dataset.i),1); save('bot_aturan', aturanBalas); render(); }
+  else if(act==='simpan-pin'){ const inp=document.getElementById('inputPin'); if(!inp) return; pinText=inp.value.trim()||pinText; save('pantau_pin', pinText); botLogTambah='✅ Pin disimpan.'; render(); }
+  else if(act==='kirim-pin'){ if(!confirm('Kirim pin ini ke chat?\n\n'+pinText)) return; const d=await ambilJSON(URL_CHAT) || []; d.push({id:Date.now(), nama:'📌 PIN', teks:pinText, time:new Date().toLocaleString('id-ID'), isSystem:true}); await postChat(d); botLogTambah='📌 Pin udah dikirim ke chat!'; render(); cek(true); }
+  else if(act==='download-laporan') downloadLaporan();
+  else if(act==='kirim-wa') kirimLaporanWA();
+  else if(act==='ganti-nomor-wa'){ const isi=prompt('Nomor WA baru?\nFormat: 62 + nomor tanpa 0\nContoh: 6281234567890', nomorWA); if(!isi) return; nomorWA=isi.trim().replace(/[^0-9]/g,''); localStorage.setItem('pantau_nomor_wa', nomorWA); alert('Nomor WA diganti jadi '+nomorWA); render(); }
+});
+document.addEventListener('input', (e)=>{ if(e.target.id==='cari') render(); });
+document.addEventListener('change', (e)=>{ if(e.target.id==='filter') render(); });
+document.getElementById('btnRefresh').addEventListener('click', ()=>cek(true));
+document.getElementById('btnKirimDM').addEventListener('click', kirimDM);
+document.getElementById('btnBatalDM').addEventListener('click', ()=>document.getElementById('modal').classList.remove('show'));
+if('Notification' in window && Notification.permission==='default'){ Notification.requestPermission(); }
+loadCacheAwal();
+cek();
+setInterval(()=>{ if(!document.hidden) cek(); }, 10000);
+document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) cek(); });
+</script>
+</body>
+</html>

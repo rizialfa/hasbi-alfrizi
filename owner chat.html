@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHAT OWNER - RIZI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif}
+body{background:#000;color:#fff;min-height:100vh;overflow:hidden}
+.wrap{max-width:480px;margin:0 auto;height:100vh;height:100dvh;background:linear-gradient(180deg,rgba(255,215,0,.18),rgba(0,0,0,.92));display:flex;flex-direction:column;border-left:1px solid #d4af37;border-right:1px solid #d4af37;overflow:hidden}
+.top{display:flex;align-items:center;gap:10px;padding:14px;background:rgba(255,215,0,.12);backdrop-filter:blur(12px);border-bottom:1px solid #d4af37;position:sticky;top:0;z-index:20;flex-shrink:0}
+.ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.top .burger{width:42px;height:42px;border-radius:12px;border:1px solid #d4af37;background:linear-gradient(135deg,#FFD700,#FFB800);color:#000;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.top b{flex:1;font-size:17px;color:#FFD700;min-width:0}.top b span{font-size:10px;display:block;color:#e8d5a3;letter-spacing:1px;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{font-size:11px;font-weight:900;padding:6px 10px;border-radius:20px;background:#FFD700;color:#000;display:flex;align-items:center;gap:4px;flex-shrink:0}
+.home{width:38px;height:38px;border-radius:10px;background:#FFD700;color:#000;display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0}
+.me{margin:0;padding:10px 12px;background:rgba(255,215,0,.12);backdrop-filter:blur(10px);color:#fff;display:flex;align-items:center;gap:11px;box-shadow:0 4px 10px rgba(0,0,0,.3);border-bottom:1px solid rgba(255,215,0,.3);flex-shrink:0}
+.me .ava{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#FFD700,#FFB800);color:#000;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:19px;flex-shrink:0;position:relative}
+.me .ava .dotOnline{position:absolute;bottom:1px;right:1px;width:12px;height:12px;border-radius:50%;background:#00ff88;border:2px solid #111}
+.me b{font-size:16px;color:#FFD700;display:block;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.me small{font-size:12.5px;color:#e8d5a3;display:block;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dot{width:8px;height:8px;border-radius:50%;background:#888}.dot.on{background:#00ff88;box-shadow:0 0 8px #00ff88}
+.chat{flex:1;min-height:0;padding:14px 12px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.msgRow{display:flex;gap:8px;align-items:flex-start;max-width:100%;min-width:0}
+.msgRow.mine{justify-content:flex-end}
+.msgAvatar{width:38px;height:38px;min-width:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:#111;flex-shrink:0;overflow:hidden;background:linear-gradient(135deg,#e8e8e8,#b0b0b0)}
+.msg{width:fit-content;max-width:100%;padding:8px 10px 6px;border-radius:12px;font-size:14px;line-height:1.4;word-break:break-word;overflow-wrap:anywhere;background:linear-gradient(135deg,#e8e8e8,#c0c0c0);color:#111;box-shadow:0 1px 3px rgba(0,0,0,.4);cursor:pointer;min-width:0}
+.msgRow.mine .msg{max-width:100%;background:linear-gradient(135deg,#2a2100,#000);color:#FFD700;border:1px solid #d4af37}
+.msg b{font-size:13.5px;font-weight:700;color:#111;display:block;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg .isi{font-size:15px;line-height:1.4;color:inherit;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere}
+.msg .jamRow{display:flex;justify-content:flex-end;align-items:center;gap:4px;margin-top:2px}
+.msg .jam{font-size:11px;color:#555}
+.msgRow.mine .msg .jam{color:#e8d5a3}
+.msg .centang{font-size:12px;color:#53bdeb;font-weight:700}
+.msg .ke{font-size:10px;color:#555;word-break:break-all}
+.msgRow.mine .msg .ke{color:#e8d5a3}
+.hapusWrap{display:flex;justify-content:flex-end;margin-top:5px;gap:6px}
+.hapusBtn{padding:7px 12px;border-radius:9px;border:none;background:#ff2222;color:#fff;font-weight:900;font-size:11px;cursor:pointer}
+.hapusBtn.batal{background:rgba(255,255,255,.15);color:#fff}
+.sys{align-self:center;background:rgba(0,0,0,.6);border:1px dashed #d4af37;text-align:center;font-size:12px;max-width:95%;padding:8px 12px;border-radius:12px;color:#FFD700;overflow-wrap:anywhere}
+.typing{padding:0 14px;font-size:11px;color:#FFD700;min-height:16px;font-weight:700;flex-shrink:0}
+.bar{display:flex;gap:8px;padding:12px;background:rgba(255,215,0,.08);backdrop-filter:blur(10px);border-top:1px solid rgba(255,215,0,.3);align-items:center;flex-shrink:0;padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+.bar input{flex:1;min-width:0;padding:13px 16px;border-radius:24px;border:1px solid rgba(255,215,0,.3);background:rgba(0,0,0,.5);color:#fff;outline:none;font-size:14px}
+.bar input::placeholder{color:#888}
+.bar input:focus{border-color:#FFD700;background:rgba(0,0,0,.65)}
+.bar button{width:46px;height:46px;flex-shrink:0;border-radius:50%;border:none;background:linear-gradient(135deg,#FFD700,#FFB800);color:#000;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.bar button:disabled{opacity:.6}
+.drawer{position:fixed;top:0;left:-300px;width:285px;height:100%;background:linear-gradient(180deg,#2a2100,#171100,#000);border-right:1px solid #d4af37;z-index:50;transition:.3s;padding:18px;overflow-y:auto}
+.drawer.open{left:0}.drawer a{display:flex;gap:10px;align-items:center;padding:13px 10px;color:#FFD700;text-decoration:none;border:1px solid rgba(255,215,0,.25);border-radius:12px;margin-bottom:8px;font-weight:700;background:rgba(255,215,0,.06)}
+.drawer a.on{background:linear-gradient(180deg,#FFD700,#FFB800);color:#000}
+.drawer a .dico{width:38px;height:38px;border-radius:10px;background:rgba(0,0,0,.5);border:1px solid #d4af37;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.navLabel{font-size:11px;letter-spacing:2px;color:#e8d5a3;font-weight:900;padding:14px 10px 6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top"><button class="burger" onclick="document.getElementById('drawer').classList.toggle('open')"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><b>CHAT OWNER RIZI<span id="topOnline">OWNER ONLY • GOLD</span></b><span class="pill"><span class="dot on"></span><span id="onlineCount">0</span></span><a class="home" href="index.html"><svg class="ic" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></a></div>
+<div class="me"><div class="ava" id="meAva">R<span class="dotOnline" id="meDot"></span></div><div style="flex:1;min-width:0"><b id="meNama">Owner Rizi</b><small id="meSub">Owner • Online</small></div></div>
+<div class="chat" id="chatList">Lagi nyambung...</div>
+<div class="typing" id="typingBox"></div>
+<div class="bar"><input id="pesanInput" placeholder="Ketik sebagai Owner Rizi... @nama buat DM"><button id="btnKirim" onclick="kirimChat()"><svg class="ic" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg></button></div>
+</div>
+<div class="drawer" id="drawer"><h3 style="color:#FFD700">ALFARIZI</h3><p style="color:#e8d5a3;font-size:12px;margin:4px 0 0">MENU • OWNER ONLY</p>
+<div class="navLabel">MENU UTAMA</div>
+<a href="index.html"><span class="dico"><svg class="ic" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg></span> Home</a>
+<a href="chat.html"><span class="dico"><svg class="ic" viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 21l2-5.6A8.5 8.5 0 1 1 21 11.5z"/></svg></span> Chat</a>
+<a href="upload.html"><span class="dico"><svg class="ic" viewBox="0 0 24 24"><path d="M3 8l4 4 5-6 5 6 4-4v10H3z"/><path d="M3 18h18"/></svg></span> Owner Upload</a>
+<div class="navLabel">OWNER</div>
+<a href="pantau.html"><span class="dico"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg></span> Pantau</a>
+<a href="balas-komen.html"><span class="dico"><svg class="ic" viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 21l2-5.6A8.5 8.5 0 1 1 21 11.5z"/></svg></span> Balas Komen</a>
+<a href="hapus-komen.html"><span class="dico"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13M10 11v5M14 11v5"/></svg></span> Hapus Komen</a>
+<a href="hapus-uploadan.html"><span class="dico"><svg class="ic" viewBox="0 0 24 24"><path d="M3 8l4 4 5-6 5 6 4-4v10H3z"/><path d="M3 18h18"/></svg></span> Hapus Uploadan</a>
+<a href="owner-rizi.html" class="on"><span class="dico">👑</span> Chat Owner Rizi</a>
+<br><button onclick="document.getElementById('drawer').classList.remove('open')" style="width:100%;padding:11px;border-radius:10px;border:none;font-weight:900;background:linear-gradient(180deg,#FFD700,#FFB800)">Tutup</button></div>
+<script>
+var CHAT_ID="21ba649c319a2054608c";var PRESENCE_ID="71d20ec46da14819e418";var BAN_ID="b35d8c7b99398ba2db31";
+var URL_CHAT="https://api.npoint.io/"+CHAT_ID;var URL_PRESENCE="https://api.npoint.io/"+PRESENCE_ID;var URL_BAN="https://api.npoint.io/"+BAN_ID;
+var OWNER_NAMA="Owner Rizi";
+var namaKu=OWNER_NAMA, myUid="", chats=[], presence=[], banned=[], muted=[], typingTerakhir=0;
+var chatDipilih='';
+var idChatTerakhir=null, sudahScrollAwal=false, lagiKirim=false;
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function getUid(){ var u=localStorage.getItem('alfarizi_owner_uid'); if(!u){ u='OWNER-'+Date.now().toString(36); localStorage.setItem('alfarizi_owner_uid',u); } return u; }
+function namaDariUid(uid){ if(!uid) return ''; for(var i=0;i<presence.length;i++){ if(presence[i].uid===uid) return presence[i].nama; } return ''; }
+function isMine(c){ if(c.uid) return c.uid===myUid; return c.nama===namaKu; }
+function jamSaja(t){ if(!t) return ''; var m=String(t).match(/(\d{1,2})[.:](\d{2})/); if(m) return m[1]+'.'+m[2]; return String(t).slice(-5); }
+function isOnline(p){var ts=Number(p.lastSeen)||0;return ts&&(Date.now()-ts)<60000}
+function formatLast(ts){ts=Number(ts)||0;if(!ts)return 'Offline';var d=Math.floor((Date.now()-ts)/1000);if(d<60)return 'Online';if(d<3600)return Math.floor(d/60)+' mnt lalu';if(d<86400)return Math.floor(d/3600)+' jam lalu';return Math.floor(d/86400)+' hari lalu'}
+function scrollKeBawah(){
+  var list=document.getElementById('chatList');
+  if(!list) return;
+  requestAnimationFrame(function(){ list.scrollTop=list.scrollHeight; });
+}
+function namaOnlineTeks(){
+  var on=presence.filter(isOnline);
+  if(!on.length) return '';
+  return on.map(function(p){ return p.nama + ((p.uid && p.uid===myUid) ? ' (Lu)' : ''); }).join(', ');
+}
+function updateOnlineHeader(){
+  var teks=namaOnlineTeks();
+  var topEl=document.getElementById('topOnline');
+  if(topEl) topEl.innerText = teks ? teks+' • ONLINE' : 'OWNER ONLY • GOLD';
+  var on=presence.filter(isOnline);
+  var c=document.getElementById('onlineCount');
+  if(c) c.innerText=on.length;
+  document.getElementById('meSub').innerText='Owner • '+on.length+' online';
+}
+function mulai(){
+  myUid=getUid();
+  cekSemua(); kirimPresence(false);
+  setInterval(cekSemua,3000);
+  setInterval(function(){kirimPresence(Date.now()-typingTerakhir<3000)},5000);
+  var inp=document.getElementById('pesanInput'); inp.addEventListener('keydown',function(e){if(e.key==='Enter')kirimChat()}); inp.addEventListener('input',function(){typingTerakhir=Date.now(); kirimPresence(true)});
+}
+async function kirimPresence(typing){ try{ var r=await fetch(URL_PRESENCE,{cache:'no-store'});var d=await r.json();if(!Array.isArray(d))d=[]; d=d.filter(function(x){ if(x.uid && x.uid===myUid) return false; return true; }); var data={uid:myUid,nama:namaKu,lastSeen:Date.now(),firstSeen:Date.now(),page:'Chat Owner',device:'HP',typing:!!typing}; var idx=d.findIndex(function(x){return x.uid===myUid}); if(idx>=0) d[idx]=data; else d.push(data); await fetch(URL_PRESENCE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}); }catch(e){} }
+async function cekSemua(){ try{var r=await fetch(URL_CHAT,{cache:'no-store'});var d=await r.json();if(Array.isArray(d))chats=d}catch(e){} try{ var r2=await fetch(URL_PRESENCE,{cache:'no-store'});var d2=await r2.json(); if(Array.isArray(d2)){ var map={}; d2.forEach(function(p){ var key=p.uid || ('NAMA:'+p.nama); if(!map[key] || Number(p.lastSeen||0) > Number(map[key].lastSeen||0)) map[key]=p; }); presence=Object.values(map); } }catch(e){} try{var r3=await fetch(URL_BAN,{cache:'no-store'});var d3=await r3.json();if(d3){banned=d3.banned||[];muted=d3.muted||[]}}catch(e){} render(); }
+function tekanChat(id){ chatDipilih = (chatDipilih===String(id) ? '' : String(id)); render(); }
+async function hapusChatOwner(id){
+  if(!confirm('Hapus chat ini? (Owner)')) return;
+  try{ var r=await fetch(URL_CHAT,{cache:'no-store'});var d=await r.json();if(!Array.isArray(d))d=[]; d=d.filter(function(x){ return String(x.id)!==String(id); }); await fetch(URL_CHAT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)}); chatDipilih=''; cekSemua(); }catch(e){ alert('Gagal hapus!'); }
+}
+function render(){
+  updateOnlineHeader();
+  var ty=presence.filter(function(p){return p.typing && p.uid!==myUid});
+  document.getElementById('typingBox').innerText=ty.length?ty.map(function(x){return x.nama}).join(', ')+' lagi ngetik...':'';
+  var list=document.getElementById('chatList');
+  if(!chats.length){list.innerHTML='Belum ada chat.';return}
+  var out='';
+  chats.forEach(function(c){
+    if(c.isSystem){out+='<div class="sys">'+esc(c.teks)+'</div>';return}
+    var mine=isMine(c);
+    var isOwner=c.isOwner||(c.nama&&c.nama.indexOf('Owner')!==-1);
+    var namaTampil = c.uid ? (namaDariUid(c.uid) || c.nama) : c.nama;
+    var isi=c.sticker?'<div style="font-size:48px">'+esc(c.sticker)+'</div>':esc(c.teks||'');
+    var toTampil=c.to ? esc(c.to) : '';
+    if(c.toUid && c.toUid===myUid) toTampil='Lu';
+    var keHtml = toTampil ? '<div class="ke">Ke: '+toTampil+'</div>' : '';
+    var hapusHtml='';
+    if(chatDipilih===String(c.id)){ hapusHtml='<div class="hapusWrap"><button class="hapusBtn" onclick="event.stopPropagation();hapusChatOwner(\''+c.id+'\')">🗑️ Hapus (Owner)</button><button class="hapusBtn batal" onclick="event.stopPropagation();tekanChat(\''+c.id+'\')">Batal</button></div>'; }
+    if(mine){
+      out+='<div class="msgRow mine"><div style="display:flex;flex-direction:column;align-items:flex-end;max-width:85%;min-width:0"><div class="msg" onclick="tekanChat(\''+c.id+'\')"><div class="isi">'+isi+'</div>'+keHtml+'<div class="jamRow"><span class="jam">'+esc(jamSaja(c.time))+'</span><span class="centang">✓</span></div></div>'+hapusHtml+'</div></div>';
+    } else {
+      var inisial=(namaTampil||'?').charAt(0).toUpperCase();
+      var avatar='<div class="msgAvatar">'+esc(inisial)+'</div>';
+      var label=isOwner?'~ Owner':('~ '+namaTampil);
+      out+='<div class="msgRow"><div style="display:flex;gap:8px;align-items:flex-start;min-width:0;max-width:85%"><div style="display:flex;gap:8px;align-items:flex-start;min-width:0;max-width:100%">'+avatar+'<div style="display:flex;flex-direction:column;min-width:0;flex:1"><div class="msg" onclick="tekanChat(\''+c.id+'\')"><b>'+esc(label)+'</b><div class="isi">'+isi+'</div>'+keHtml+'<div class="jamRow"><span class="jam">'+esc(jamSaja(c.time))+'</span></div></div>'+hapusHtml+'</div></div></div></div>';
+    }
+  });
+  list.innerHTML=out;
+  var idBaru = chats.length ? String(chats[chats.length-1].id) : null;
+  var adaChatBaru = (idBaru !== idChatTerakhir);
+  idChatTerakhir = idBaru;
+  if(!sudahScrollAwal || adaChatBaru){ sudahScrollAwal=true; scrollKeBawah(); }
+}
+function klikOrang(nama){if(!nama||nama===namaKu)return;var inp=document.getElementById('pesanInput');inp.value='@'+nama+' ';inp.focus()}
+async function kirimChat(){
+  if(lagiKirim) return;
+  var inp=document.getElementById('pesanInput');var teks=inp.value.trim();if(!teks)return;
+  var to='';var toUid='';
+  var m=teks.match(/^@(\S+)\s+/);
+  if(m){ to=m[1]; for(var i=0;i<presence.length;i++){ if(presence[i].nama===to){ toUid=presence[i].uid||''; break; } } }
+  var pesanBaru={id:Date.now(),uid:myUid,nama:namaKu,teks:teks,time:new Date().toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),to:to||undefined,toUid:toUid||undefined,isOwner:true};
+  lagiKirim=true;
+  var btn=document.getElementById('btnKirim'); if(btn) btn.disabled=true;
+  inp.value='';
+  chats.push(pesanBaru);
+  render();
+  scrollKeBawah();
+  try{
+    var r=await fetch(URL_CHAT,{cache:'no-store'});var d=await r.json();if(!Array.isArray(d))d=[];
+    if(!d.find(function(x){return String(x.id)===String(pesanBaru.id)})) d.push(pesanBaru);
+    if(d.length>300)d=d.slice(-300);
+    await fetch(URL_CHAT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});
+    typingTerakhir=0;kirimPresence(false);cekSemua();
+  }catch(e){ alert('Gagal kirim!'); }
+  lagiKirim=false;
+  if(btn) btn.disabled=false;
+  inp.focus();
+}
+mulai();
+</script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KELAS DKV</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+html,body{background:#000;color:#e8e8e8;height:auto;overflow:visible;overflow-x:hidden}
+body{background:#000}
+.wrap{max-width:480px;margin:0 auto;height:auto;background:linear-gradient(180deg,#1a1a1a 0%,#000 18%,#000 100%);display:flex;flex-direction:column;border-left:1px solid rgba(255,255,255,.12);border-right:1px solid rgba(255,255,255,.12);position:relative;overflow:visible}
+.topBar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(0,0,0,.92);border-bottom:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px)}
+.btnNav{width:38px;height:38px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:#0a0a0a;color:#fff;font-size:18px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.btnNav svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.logo{width:40px;height:40px;border-radius:50%;overflow:hidden;border:1px solid rgba(255,255,255,.25);background:#000;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.logo img,.logo svg{width:100%;height:100%;object-fit:cover;display:block}
+.topTitle{flex:1}.topTitle small{color:#888;font-size:9px;letter-spacing:2px;font-weight:900}.topTitle b{font-size:15px;color:#fff}
+.live{font-size:10px;font-weight:900;background:#111;color:#ccc;padding:5px 8px;border-radius:20px;border:1px solid rgba(255,255,255,.15)}
+.btnRefresh{width:32px;height:32px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:#0a0a0a;color:#fff;font-size:15px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.btnRefresh svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sideMenu{position:fixed;top:0;left:-300px;width:280px;max-width:85vw;height:100vh;height:100dvh;background:rgba(0,0,0,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-right:1px solid rgba(255,255,255,.15);z-index:100;transition:left .3s ease;display:flex;flex-direction:column;overflow:hidden;padding-bottom:env(safe-area-inset-bottom)}
+.sideMenu.show{left:0}
+.navHead{padding:14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding-top:calc(14px + env(safe-area-inset-top))}
+.navCrown{width:52px;height:52px;flex-shrink:0;border-radius:14px;background:#111;border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.navCrown img,.navCrown svg{width:100%;height:100%;object-fit:cover;display:block}
+.navHeadText{flex:1;min-width:0}.navHeadText b{font-size:16px;color:#fff}.navHeadText span{font-size:10px;color:#888;letter-spacing:1px}
+.navClose{width:38px;height:38px;flex-shrink:0;background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:10px;font-size:16px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.navClose svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round}
+.navLabel{padding:14px 14px 6px;font-size:11px;letter-spacing:2px;color:#666;font-weight:900}
+.navList{flex:1;min-height:0;display:block;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.navList::-webkit-scrollbar{display:none}
+.navItem{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,.02);border:none;border-bottom:1px solid rgba(255,255,255,.07);color:#fff;text-align:left;cursor:pointer;width:100%;font-weight:600}
+.navItem.on{background:rgba(255,255,255,.08);border-left:3px solid #c0c0c0;color:#fff}
+.navIcon{width:44px;height:44px;flex-shrink:0;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center}
+.navIcon svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.navItem.on .navIcon{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3)}
+.navText{flex:1;min-width:0}.navText b{font-size:14px;display:block}.navText span{font-size:11px;color:#888;display:block;margin-top:2px;font-weight:400}
+.navItem.on .navText span{color:#aaa}.navArrow{font-size:16px;color:#666}.navItem.on .navArrow{color:#fff}
+.navFoot{padding:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom));text-align:center;font-size:11px;color:#666;border-top:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.4)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:99;display:none}.overlay.show{display:block}
+.filterRow{display:flex;gap:6px;padding:8px 10px;background:#000;border-bottom:1px solid rgba(255,255,255,.08);overflow-x:auto;scrollbar-width:none}.filterRow::-webkit-scrollbar{display:none}
+.filterRow button{padding:7px 12px;border-radius:20px;background:#0a0a0a;color:#888;border:1px solid rgba(255,255,255,.12);font-size:11px;cursor:pointer;white-space:nowrap;flex-shrink:0;display:inline-flex;align-items:center;gap:5px}
+.filterRow button svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.filterRow button.on{background:#1a1a1a;color:#fff;font-weight:900;border:1px solid rgba(255,255,255,.35)}
+.slider{padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start}
+.slide{position:relative;background:#0a0a0a;display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(255,255,255,.1);border-radius:14px;align-self:start}
+.slideMedia{position:relative;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden;width:100%;height:160px;cursor:pointer}
+.slideMedia img{width:100%;height:100%;object-fit:cover;display:block;background:#000}
+.slideMedia video,.slideMedia iframe{width:100%;height:100%;object-fit:cover;display:block;background:#000;border:none;pointer-events:none}
+.playBadge{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:2}.playBadge span{width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;color:#fff}.playBadge svg{width:22px;height:22px;fill:#fff}
+.videoGagal{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;background:#0a0a0a;text-align:center;padding:10px}.videoGagal b{color:#fff;font-size:11px}.videoGagal small{color:#888;font-size:10px;margin-top:4px}
+.slideInfo{padding:8px 8px 10px;background:#0a0a0a;min-width:0;overflow:hidden}.slideInfo b{font-size:12px;color:#fff;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.slideInfo p{font-size:10px;color:#888;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:26px}
+.slideMeta{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}.slideMeta span{font-size:9px;padding:3px 6px;border-radius:20px;background:#000;border:1px solid rgba(255,255,255,.12);color:#aaa;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:inline-flex;align-items:center;gap:3px}.slideMeta svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.slideBtns{display:flex;gap:4px;margin-top:7px}.slideBtns button{flex:1;padding:7px 4px;border:none;border-radius:8px;font-weight:900;font-size:10px;cursor:pointer}
+.btnIcon{display:inline-flex;align-items:center;justify-content:center;gap:5px}
+.btnIcon svg{width:16px;height:16px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btnIcon svg.fill{fill:currentColor;stroke:none}
+.btnLihat{background:#1a1a1a;color:#fff;border:1px solid rgba(255,255,255,.25)!important}.btnSuara{background:#000;color:#aaa;border:1px solid rgba(255,255,255,.12)!important}.btnKomen{background:#000;color:#aaa;border:1px solid rgba(255,255,255,.12)!important}
+.komenPreview{margin-top:6px;font-size:10px;color:#888;display:block;width:100%;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;word-break:break-all;cursor:pointer;line-height:1.4}
+.komenPreview b{color:#fff;font-size:10px;display:inline;white-space:nowrap}
+.komenPreview span{color:#aaa;display:inline;white-space:nowrap}
+.bottomHint{padding:14px 7px;background:#000;border-top:1px solid rgba(255,255,255,.08);text-align:center;font-size:10px;color:#666}.bottomHint b{color:#fff}
+.progressBar{height:3px;background:rgba(255,255,255,.06)}.progressBar div{height:100%;background:#555;width:0%}
+.viewer{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:none;flex-direction:column}.viewer.show{display:flex}
+.viewerTop{display:flex;align-items:center;gap:10px;padding:12px;background:rgba(0,0,0,.9);border-bottom:1px solid rgba(255,255,255,.12)}.viewerTop b{flex:1;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}.viewerTop button{padding:8px 12px;border:none;border-radius:10px;font-weight:900;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:5px}.viewerTop button svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btnTutup{background:#ff2222;color:#fff}.btnSuaraView{background:#1a1a1a;color:#fff;border:1px solid rgba(255,255,255,.25)}
+.viewerMain{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;overflow:hidden}.viewerMain img{max-width:100%;max-height:100%;object-fit:contain}.viewerMain video{max-width:100%;max-height:100%;background:#000}.viewerMain iframe{width:100%;height:100%;border:none;background:#000}
+.viewerInfo{padding:12px;background:#000;text-align:center;border-top:1px solid rgba(255,255,255,.1)}.viewerInfo b{font-size:14px;color:#fff;display:flex;align-items:center;justify-content:center;gap:5px}.viewerInfo b svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}.viewerInfo p{font-size:12px;color:#888;margin-top:4px}
+.komenModal{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:10000;display:none;align-items:flex-end;justify-content:center}.komenModal.show{display:flex}
+.komenBox{width:100%;max-width:480px;max-height:85vh;background:rgba(0,0,0,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:20px 20px 0 0;border-top:1px solid rgba(255,255,255,.15);display:flex;flex-direction:column;overflow:hidden}
+.komenHead{display:flex;align-items:center;gap:10px;padding:14px;border-bottom:1px solid rgba(255,255,255,.1);background:#000}.komenHead b{flex:1;font-size:14px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px}.komenHead b svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btnTutupKomen{padding:8px 12px;border:1px solid rgba(255,255,255,.15);border-radius:10px;font-weight:900;cursor:pointer;font-size:13px;background:rgba(255,255,255,.06);color:#fff;display:inline-flex;align-items:center;justify-content:center}.btnTutupKomen svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round}
+.komenList{flex:1;overflow-y:auto;padding:12px}.komenItem{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08)}.komenItem b{font-size:12px;color:#fff;display:flex;align-items:center;gap:5px}.komenItem b svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}.komenItem p{font-size:13px;color:#fff;margin-top:3px;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere}.komenWaktu{display:flex;align-items:center;gap:4px;font-size:10px;color:#666;margin-top:3px}.komenWaktu svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.balasBox{margin:6px 0 0 16px;padding:6px 8px;border-radius:8px;background:linear-gradient(180deg,#FFD700,#FFB800);max-width:85%;width:fit-content}.balasBox b{color:#000!important;font-size:11px!important}.balasBox small{color:#3a2f0a!important}.balasBox p{color:#000!important;font-weight:600;font-size:11px!important}
+.btnLike{margin-top:6px;padding:5px 10px;border:1px solid rgba(255,255,255,.15);border-radius:20px;background:rgba(255,255,255,.04);color:#aaa;font-size:11px;font-weight:900;cursor:pointer}.btnLike.liked{background:rgba(42,18,21,.7);border-color:#ff5555;color:#ff8888}
+.komenForm{display:flex;flex-direction:column;gap:8px;padding:12px;background:#000;border-top:1px solid rgba(255,255,255,.12);padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+.komenForm input,.komenForm textarea{width:100%;padding:12px 14px;border-radius:12px;background:#111;border:1px solid rgba(255,255,255,.15);color:#fff;outline:none;font-size:13px;font-family:inherit}
+.komenForm input::placeholder,.komenForm textarea::placeholder{color:#666}
+.komenForm input:focus,.komenForm textarea:focus{border-color:rgba(255,255,255,.45);background:#151515}
+.komenForm textarea{min-height:70px;max-height:140px;resize:vertical;line-height:1.45}
+.btnKirimKomen{padding:12px;border:none;border-radius:12px;background:#fff;color:#000;font-weight:900;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;gap:6px}
+.btnKirimKomen:disabled{opacity:.6;cursor:wait}
+.toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:12px 18px;border-radius:20px;font-weight:bold;font-size:13px;display:none;z-index:10001;border:1px solid rgba(255,255,255,.2)}
+.empty{grid-column:1/-1;height:300px;display:flex;align-items:center;justify-content:center;text-align:center;color:#888;font-size:13px;padding:20px}.endSpacer{height:40px}
+</style>
+</head>
+<body>
+<div class="overlay" id="overlay" onclick="toggleMenu(false)"></div>
+<div class="sideMenu" id="sideMenu">
+  <div class="navHead"><div class="navCrown"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="18" fill="#111"/><text x="50" y="62" text-anchor="middle" font-family="Arial" font-size="28" font-weight="900" fill="#fff">DKV</text></svg></div><div class="navHeadText"><b>KELAS DKV</b><br><span>ALFARIZI</span></div><button class="navClose" onclick="toggleMenu(false)"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+  <div class="navLabel">MENU UTAMA</div>
+  <div class="navList">
+    <button class="navItem on" onclick="toggleMenu(false)"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg></span><span class="navText"><b>Home</b><span>KELAS DKV</span></span><span class="navArrow">›</span></button>
+    <button class="navItem" onclick="location.href='chat.html'"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 21l2-5.6A8.5 8.5 0 1 1 21 11.5z"/></svg></span><span class="navText"><b>Chat</b><span>Ngobrol sama semua orang</span></span><span class="navArrow">›</span></button>
+    <button class="navItem" onclick="location.href='upload.html'"><span class="navIcon"><svg viewBox="0 0 24 24"><path d="M3 8l4 4 5-6 5 6 4-4v10H3z"/><path d="M3 18h18"/></svg></span><span class="navText"><b>Owner</b><span>Upload + Pantau + Hapus Karya</span></span><span class="navArrow">›</span></button>
+  </div><div class="navFoot">ALFARIZI • Chat • Silver to Black</div>
+</div>
+<div class="wrap">
+  <div class="topBar"><button class="btnNav" onclick="toggleMenu(true)"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><div class="logo"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="50" fill="#111"/><text x="50" y="62" text-anchor="middle" font-family="Arial" font-size="24" font-weight="900" fill="#fff">DKV</text></svg></div><div class="topTitle"><small></small><b>KELAS DKV</b></div><button class="btnRefresh" onclick="refreshManual()"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button><span class="live" id="totalKarya">0 KARYA</span></div>
+  <div class="filterRow" id="filterRow"><button class="on" onclick="gantiFilter(this,'Semua')">Semua</button><button onclick="gantiFilter(this,'foto')"><svg viewBox="0 0 24 24"><path d="M3 8h3l2-3h8l2 3h3v11H3z"/><circle cx="12" cy="13" r="3.2"/></svg> Foto</button><button onclick="gantiFilter(this,'video')"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg> Video</button></div>
+  <div class="progressBar"><div id="progressFill"></div></div>
+  <div class="slider" id="slider"><div class="empty">⏳ Lagi nyambung...</div></div>
+  <div class="bottomHint">👆 <b>SCROLL BIASA AJA</b> kaya toko • Klik kartu buat gede • <span id="lastUpdate">LIVE</span></div><div class="endSpacer"></div>
+</div>
+<div class="viewer" id="viewer"><div class="viewerTop"><b id="viewerJudul">Judul</b><button class="btnSuaraView" id="btnSuaraView" onclick="toggleSuaraViewer()" style="display:none"><svg viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg> SUARA: OFF</button><button class="btnTutup" onclick="tutupViewer()"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg> TUTUP</button></div><div class="viewerMain" id="viewerMain" onclick="klikViewerMain(event)"></div><div class="viewerInfo"><b id="viewerNama"></b><p id="viewerDesk"></p><small id="viewerMeta" style="color:#888;font-size:11px"></small></div></div>
+<div class="komenModal" id="komenModal" onclick="if(event.target.id==='komenModal')tutupKomen()"><div class="komenBox"><div class="komenHead"><b id="komenJudul">Komentar</b><button class="btnTutupKomen" onclick="tutupKomen()"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div><div class="komenList" id="komenListBox"></div><div class="komenForm"><input id="komenNama" placeholder="Nama lu siapa?"><textarea id="komenIsi" placeholder="Tulis komen lu di sini..."></textarea><button class="btnKirimKomen btnIcon" id="btnKirimKomen" onclick="kirimKomenBox()"><svg class="fill" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg> KIRIM KOMEN KE OWNER</button></div></div></div>
+<div class="toast" id="toast"></div>
+<script>
+document.documentElement.style.overflow='visible';document.body.style.overflow='visible';
+const NPOINT_ID="43118ccd0ef279ea8490";const URL_API="https://api.npoint.io/"+NPOINT_ID;const OWNER_NAME="RIZI 👑 OWNER";
+let karyaList=[],filter='Semua',viewerVideoEl=null,isViewerOpen=false,lastDataString="",sudahPernahLoad=false,lagiAmbil=false,viewerId=null,komenId=null,currentObservers=[],progressRaf=null,lastProgress=-1,lagiKirimKomen=false,lagiSyncKomen=false;
+const IC={mata:'<svg viewBox="0 0 24 24"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',chat:'<svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 21l2-5.6A8.5 8.5 0 1 1 21 11.5z"/></svg>',suara:'<svg viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>',orang:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg>',jam:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',hati:'<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.5C.5 8 2.5 4.5 6 4.5c2 0 3.5 1 6 3 2.5-2 4-3 6-3 3.5 0 5.5 3.5 4 7C19.5 16.4 12 21 12 21z"/></svg>',hatiIsi:'<svg class="fill" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.5C.5 8 2.5 4.5 6 4.5c2 0 3.5 1 6 3 2.5-2 4-3 6-3 3.5 0 5.5 3.5 4 7C19.5 16.4 12 21 12 21z"/></svg>',kamera:'<svg viewBox="0 0 24 24"><path d="M3 8h3l2-3h8l2 3h3v11H3z"/><circle cx="12" cy="13" r="3.2"/></svg>',play:'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'};
+function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function escapeAttr(s){return escapeHtml(s).replace(/'/g,'&#39;')}
+function potongTeks(s,max){ s=String(s||'').replace(/\s+/g,' ').trim(); if(s.length<=max) return s; return s.slice(0,max)+'…'; }
+function getLink(k){if(!k)return'';let c=[k.link,k.linkVideo,k.video,k.url,k.src,k.media,k.file,k.linkFoto,k.foto,k.image,k.gambar];for(let v of c){if(v&&typeof v==='string'&&v.trim())return v.trim()}return''}
+function getFotoLink(k){return (k&&(k.linkFoto||k.foto||k.image||k.gambar||''))||''}
+function isCatbox(link){return /catbox\.moe/i.test(String(link||''))}
+function videoJadiFoto(el){if(el.dataset.sudahGanti)return;el.dataset.sudahGanti='1';let src=el.currentSrc||el.src;let img=document.createElement('img');img.src=src;img.style.width='100%';img.style.height='100%';img.style.objectFit='cover';img.onerror=function(){img.style.display='none'};el.parentNode.replaceChild(img,el)}
+function fotoJadiVideo(el){if(el.dataset.sudahGanti)return;el.dataset.sudahGanti='1';let src=el.currentSrc||el.src;let v=document.createElement('video');v.src=src;v.autoplay=true;v.muted=true;v.loop=true;v.playsInline=true;v.preload='auto';v.className='autoVideo';v.style.width='100%';v.style.height='100%';v.style.objectFit='cover';v.onerror=function(){videoJadiFoto(v)};el.parentNode.replaceChild(v,el);setupSliderAuto()}
+function getTipe(k){
+  let t=String((k&&(k.tipe||k.type||k.jenis||''))||'').toLowerCase();
+  if(t.includes('foto')||t.includes('image')||t.includes('gambar')||t.includes('photo'))return'foto';
+  if(t.includes('video')||t.includes('vid'))return'video';
+  let link=getLink(k).toLowerCase();
+  if(/\.(mp4|mov|webm|m4v|mkv)(\?|#|$)/.test(link))return'video';
+  if(/youtube|youtu\.be|drive\.google|tiktok|instagram|vimeo/.test(link))return'video';
+  if(/\.(jpg|jpeg|png|gif|webp|avif|bmp)(\?|#|$)/.test(link))return'foto';
+  if(link.startsWith('data:image'))return'foto';
+  if(link.startsWith('data:video'))return'video';
+  return t||'foto';
+}
+function toggleMenu(buka){document.getElementById('sideMenu').classList.toggle('show',buka);document.getElementById('overlay').classList.toggle('show',buka);document.body.style.overflow=buka?'hidden':'visible';document.documentElement.style.overflow=buka?'hidden':'visible'}
+function toast(t){let e=document.getElementById('toast');e.innerText=t;e.style.display='block';setTimeout(()=>e.style.display='none',3000)}
+function gantiFilter(btn,f){filter=f;document.querySelectorAll('#filterRow button').forEach(x=>x.classList.remove('on'));btn.classList.add('on');lastDataString="";render()}
+function refreshManual(){lastDataString="";ambilData(true);toast('🔄 Lagi refresh...')}
+function buatEmbed(link,untukViewer,tipe){
+  link=String(link||'').trim();if(!link)return{jenis:'kosong',embed:''};
+  if(isCatbox(link)){
+    let low=link.toLowerCase();
+    if(/\.(jpg|jpeg|png|gif|webp|avif|bmp)(\?|#|$)/.test(low))return{jenis:'foto',embed:link};
+    if(/\.(mp4|mov|webm|m4v|mkv)(\?|#|$)/.test(low))return{jenis:'mp4',embed:link};
+    if(tipe==='foto')return{jenis:'foto',embed:link};
+    return{jenis:'mp4',embed:link};
+  }
+  let ytId='';let m1=link.match(/[?&]v=([^&#]+)/);let m2=link.match(/youtu\.be\/([^?&#]+)/);let m3=link.match(/shorts\/([^?&#]+)/);let m4=link.match(/embed\/([^?&#]+)/);
+  if(m1)ytId=m1[1];else if(m2)ytId=m2[1];else if(m3)ytId=m3[1];else if(m4)ytId=m4[1];
+  if(ytId){let mute=untukViewer?'0':'1';return{jenis:'youtube',embed:'https://www.youtube.com/embed/'+ytId+'?autoplay=1&mute='+mute+'&loop=1&playlist='+ytId+'&playsinline=1&controls=1&rel=0&modestbranding=1'}}
+  if(link.includes('drive.google.com')){let id='';let dm=link.match(/\/d\/([^\/\?#]+)/);if(dm)id=dm[1];else{let d2=link.match(/[?&]id=([^&#]+)/);if(d2)id=d2[1]}if(id)return{jenis:'drive',embed:'https://drive.google.com/file/d/'+id+'/preview'}}
+  if(link.startsWith('data:video')||link.startsWith('blob:')||/\.(mp4|mov|webm|m4v|mkv)(\?|#|$)/i.test(link))return{jenis:'mp4',embed:link};
+  if(link.startsWith('data:image')||/\.(jpg|jpeg|png|gif|webp|avif|bmp)(\?|#|$)/i.test(link))return{jenis:'foto',embed:link};
+  if(tipe==='video')return{jenis:'mp4',embed:link};
+  if(tipe==='foto')return{jenis:'foto',embed:link};
+  return{jenis:'link',embed:link};
+}
+function waktuKomen(ts){if(!ts||isNaN(ts))return'';let d=new Date(ts),now=new Date(),s=now-d,men=Math.floor(s/60000),jam=Math.floor(s/3600000),hari=Math.floor(s/86400000),tgl=d.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}),jamStr=d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});if(s<60000)return'Baru saja • '+jamStr;if(men<60)return men+' menit lalu • '+jamStr;if(jam<24)return jam+' jam lalu • '+jamStr;if(hari===1)return'Kemarin • '+tgl+', '+jamStr;if(hari<7)return hari+' hari lalu • '+tgl+', '+jamStr;return tgl+', '+jamStr}
+function tsKomen(c){return c.ts||c.id||0}
+function ambilLiked(){try{return JSON.parse(localStorage.getItem('dkv_komen_liked')||'[]')}catch(e){return[]}}
+function simpanLiked(l){localStorage.setItem('dkv_komen_liked',JSON.stringify(l))}
+function ambilKomenLokal(){try{return JSON.parse(localStorage.getItem('dkv_komen_list')||'[]')}catch(e){return[]}}
+function komenUntukKarya(id,judul){let map={};let k=karyaList.find(x=>x.id===id);if(k&&Array.isArray(k.komen))k.komen.forEach(c=>{map[c.id]=JSON.parse(JSON.stringify(c))});ambilKomenLokal().filter(x=>String(x.karyaId)===String(id)||x.karya===judul).forEach(l=>{if(map[l.id]){let g=[...(map[l.id].balas||[])];(l.balas||[]).forEach(b=>{if(!g.find(x=>x.teks===b.teks&&x.nama===b.nama))g.push(b)});map[l.id].balas=g;if(map[l.id].likes==null)map[l.id].likes=l.likes||0;if(!map[l.id].komen)map[l.id].komen=l.komen||l.teks}else{map[l.id]=JSON.parse(JSON.stringify(l))}});return Object.values(map).sort((a,b)=>a.id-b.id)}
+function renderKomenBox(){let k=karyaList.find(x=>x.id===komenId);if(!k)return;let list=komenUntukKarya(komenId,k.judul),liked=ambilLiked();document.getElementById('komenJudul').innerHTML=IC.chat+' Komentar - '+escapeHtml(k.judul)+' ('+list.length+')';if(!list.length){document.getElementById('komenListBox').innerHTML='<p style="font-size:12px;color:#888;padding:10px 0;text-align:center">Belum ada komen.<br>Jadi yang pertama komen!</p>';return}document.getElementById('komenListBox').innerHTML=list.map(c=>{let bh=(c.balas||[]).map(b=>`<div class="balasBox"><b>${escapeHtml(b.nama||OWNER_NAME)}</b> <small>• ${escapeHtml(b.waktu||waktuKomen(b.ts||b.id))}</small><p>${escapeHtml(b.teks)}</p></div>`).join('');let sl=liked.includes(c.id),jl=c.likes||0;return `<div class="komenItem"><b>${IC.orang} ${escapeHtml(c.nama)}</b><span class="komenWaktu">${IC.jam} ${escapeHtml(waktuKomen(tsKomen(c)))}</span><p>${escapeHtml(c.komen||c.teks||'')}</p>${bh}<button class="btnLike btnIcon ${sl?'liked':''}" onclick="toggleLike(${c.id},event)">${sl?IC.hatiIsi:IC.hati} ${jl} Suka</button></div>`}).join('')}
+async function toggleLike(id,ev){if(ev)ev.stopPropagation();let liked=ambilLiked(),sd=liked.includes(id);if(sd)liked=liked.filter(x=>x!==id);else liked.push(id);simpanLiked(liked);karyaList.forEach(k=>{(k.komen||[]).forEach(c=>{if(c.id===id)c.likes=Math.max(0,(c.likes||0)+(sd?-1:1))})});let lok=ambilKomenLokal();lok.forEach(l=>{if(l.id===id)l.likes=Math.max(0,(l.likes||0)+(sd?-1:1))});localStorage.setItem('dkv_komen_list',JSON.stringify(lok));renderKomenBox();try{await fetch(URL_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(karyaList)});lastDataString=""}catch(e){}}
+function bukaKomen(id){let k=karyaList.find(x=>x.id===id);if(!k)return;komenId=id;let s=localStorage.getItem('dkv_nama_komen');if(s)document.getElementById('komenNama').value=s;document.getElementById('komenIsi').value='';renderKomenBox();document.getElementById('komenModal').classList.add('show');document.body.style.overflow='hidden';document.querySelectorAll('.autoVideo').forEach(v=>v.pause())}
+function tutupKomen(){komenId=null;document.getElementById('komenModal').classList.remove('show');document.body.style.overflow='visible';document.documentElement.style.overflow='visible';playSemuaVideoDepan()}
+async function postKaryaListDenganRetry(data){
+  for(let percobaan=1;percobaan<=3;percobaan++){
+    try{
+      let r=await fetch(URL_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+      if(!r.ok)throw new Error('POST '+r.status);
+      await new Promise(res=>setTimeout(res,800));
+      let cek=await fetch(URL_API,{cache:'no-store'}); let cekData=await cek.json();
+      let listCek=Array.isArray(cekData)?cekData:(Array.isArray(cekData.data)?cekData.data:[]);
+      return {ok:true,server:listCek};
+    }catch(e){ if(percobaan<3) await new Promise(res=>setTimeout(res,1000*percobaan)); else return {ok:false,server:null}; }
+  }
+}
+async function kirimKomenBox(){
+  if(lagiKirimKomen)return;
+  let idKarya=komenId;
+  let k=karyaList.find(x=>x.id===idKarya);
+  if(!k){toast('Buka komennya dulu!');return}
+  let nama=document.getElementById('komenNama').value.trim()||'Anonim';
+  let isi=document.getElementById('komenIsi').value.trim();
+  if(!isi){toast('Tulis komen dulu!');return}
+  localStorage.setItem('dkv_nama_komen',nama);
+  let btn=document.getElementById('btnKirimKomen');
+  lagiKirimKomen=true; if(btn){btn.disabled=true;btn.innerHTML='⏳ LAGI NGIRIM...'}
+  let sk=Date.now();
+  let baru={id:sk,ts:sk,karyaId:idKarya,karya:k.judul,nama:nama,komen:isi,teks:isi,likes:0,waktu:new Date().toLocaleString('id-ID',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),balas:[]};
+  let lok=ambilKomenLokal(); lok.push(baru); localStorage.setItem('dkv_komen_list',JSON.stringify(lok));
+  if(!Array.isArray(k.komen))k.komen=[]; k.komen.push(baru);
+  document.getElementById('komenIsi').value='';
+  renderKomenBox(); render();
+  toast('⏳ Lagi ngirim komen ke owner...');
+  let hasil=await postKaryaListDenganRetry(karyaList);
+  if(hasil.ok){
+    lastDataString="";
+    if(hasil.server&&hasil.server.length){ let srv=hasil.server.find(x=>x.id===idKarya); if(srv&&Array.isArray(srv.komen)&&srv.komen.find(c=>c.id===sk)){ toast('✅ Komen terkirim ke owner!'); } else { toast('✅ Komen kesimpen, owner bisa liat pas refresh.'); } }
+    else toast('✅ Komen terkirim ke owner!');
+  }else{
+    toast('⚠️ Internet / server lagi susah. Komen lu udah kesimpen, bakal auto ke-kirim sendiri pas lu buka web lagi.');
+  }
+  lagiKirimKomen=false; if(btn){btn.disabled=false;btn.innerHTML='<svg class="fill" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg> KIRIM KOMEN KE OWNER'}
+}
+async function syncKomenTertunda(){
+  if(lagiSyncKomen||lagiKirimKomen)return; let lok=ambilKomenLokal(); if(!lok.length)return;
+  lagiSyncKomen=true;
+  try{
+    let r=await fetch(URL_API,{cache:'no-store'}); let d=await r.json(); let srv=Array.isArray(d)?d:(Array.isArray(d.data)?d.data:[]);
+    let berubah=false;
+    lok.forEach(l=>{ let kk=srv.find(x=>x.id===l.karyaId||x.judul===l.karya); if(kk){ if(!Array.isArray(kk.komen))kk.komen=[]; if(!kk.komen.find(c=>c.id===l.id)){kk.komen.push(JSON.parse(JSON.stringify(l))); berubah=true;} } });
+    if(berubah){ let hasil=await postKaryaListDenganRetry(srv); if(hasil.ok){ lastDataString=""; } }
+  }catch(e){}
+  lagiSyncKomen=false;
+}
+function bukaViewer(id){let k=karyaList.find(x=>x.id===id);if(!k)return;isViewerOpen=true;viewerVideoEl=null;viewerId=id;let tipe=getTipe(k),link=getFotoLink(k)||getLink(k);document.getElementById('viewerJudul').innerText=(tipe==='foto'?'':'')+k.judul;document.getElementById('viewerNama').innerHTML=IC.orang+' '+escapeHtml(k.nama);document.getElementById('viewerDesk').innerText=k.desk||'Tanpa deskripsi.';document.getElementById('viewerMeta').innerText=k.kategori+' • '+k.waktu;let main=document.getElementById('viewerMain'),btn=document.getElementById('btnSuaraView');main.innerHTML='';if(tipe==='foto'){btn.style.display='none';let img=document.createElement('img');img.src=link;img.onerror=function(){fotoJadiVideo(img)};main.appendChild(img)}else{let emb=buatEmbed(link,true,tipe);if(emb.jenis==='youtube'){btn.style.display='none';let ifr=document.createElement('iframe');ifr.src=emb.embed;ifr.allow='autoplay; encrypted-media; fullscreen';ifr.allowFullscreen=true;main.appendChild(ifr)}else if(emb.jenis==='mp4'){btn.style.display='flex';btn.innerHTML=IC.suara+' SUARA: OFF - Klik buat ON';let v=document.createElement('video');v.src=emb.embed;v.autoplay=true;v.muted=true;v.loop=true;v.playsInline=true;v.controls=true;v.preload='auto';let f=getFotoLink(k);if(f)v.poster=f;v.onerror=function(){videoJadiFoto(v)};v.onclick=()=>{if(v.muted){v.muted=false;btn.innerHTML=IC.suara+' SUARA: ON'}};main.appendChild(v);viewerVideoEl=v;v.play().catch(()=>{})}else if(emb.jenis==='drive'){btn.style.display='none';let ifr=document.createElement('iframe');ifr.src=emb.embed;ifr.allow='autoplay; fullscreen';ifr.allowFullscreen=true;main.appendChild(ifr)}else if(emb.jenis==='foto'){btn.style.display='none';let img=document.createElement('img');img.src=emb.embed;img.onerror=function(){fotoJadiVideo(img)};main.appendChild(img)}else if(emb.jenis==='kosong'){btn.style.display='none';main.innerHTML='<div style="text-align:center;color:#fff;padding:20px">❌ Link kosong</div>'}else{btn.style.display='none';main.innerHTML=`<div style="text-align:center"><div style="font-size:60px">🎬</div><div style="margin-top:12px;color:#fff">Video harus dibuka di app-nya.</div><br><button onclick="window.open('${escapeAttr(link)}','_blank')" style="padding:12px 20px;border:none;border-radius:12px;background:#1a1a1a;font-weight:900;color:#fff;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.25)">${IC.play} BUKA LINK</button></div>`}}document.getElementById('viewer').classList.add('show');document.body.style.overflow='hidden';document.querySelectorAll('.autoVideo').forEach(v=>v.pause())}
+function tutupViewer(){isViewerOpen=false;document.getElementById('viewer').classList.remove('show');document.getElementById('viewerMain').innerHTML='';document.body.style.overflow='visible';document.documentElement.style.overflow='visible';viewerVideoEl=null;viewerId=null;playSemuaVideoDepan()}
+function toggleSuaraViewer(){if(!viewerVideoEl)return;viewerVideoEl.muted=!viewerVideoEl.muted;document.getElementById('btnSuaraView').innerHTML=IC.suara+(viewerVideoEl.muted?' SUARA: OFF - Klik buat ON':' SUARA: ON');if(!viewerVideoEl.muted)viewerVideoEl.play()}
+function klikViewerMain(e){if(e.target.id==='viewerMain')tutupViewer()}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){tutupViewer();tutupKomen();toggleMenu(false)}});
+async function ambilData(force){if(lagiAmbil||lagiKirimKomen||lagiSyncKomen)return;lagiAmbil=true;try{let r=await fetch(URL_API,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);let d=await r.json();let baru=Array.isArray(d)?d:(Array.isArray(d.data)?d.data:[]);let lok=ambilKomenLokal();baru.forEach(kk=>{if(!Array.isArray(kk.komen))kk.komen=[];lok.filter(l=>String(l.karyaId)===String(kk.id)||l.karya===kk.judul).forEach(l=>{if(!kk.komen.find(c=>c.id===l.id))kk.komen.push(JSON.parse(JSON.stringify(l)))})});let str=JSON.stringify(baru)+'|'+filter;if(force||str!==lastDataString||!sudahPernahLoad){lastDataString=str;karyaList=baru;sudahPernahLoad=true;render();if(komenId)renderKomenBox()}document.getElementById('lastUpdate').innerText='UPDATE '+new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}catch(e){if(!sudahPernahLoad){document.getElementById('slider').innerHTML='<div class="empty">❌ Gagal nyambung.<br><button onclick="refreshManual()" style="margin-top:12px;padding:11px 18px;border:none;border-radius:12px;background:#1a1a1a;color:#fff;font-weight:900;border:1px solid rgba(255,255,255,.25)">🔄 COBA LAGI</button></div>'}document.getElementById('lastUpdate').innerText='GAGAL - COBA LAGI'}finally{lagiAmbil=false}}
+function render(){
+  document.getElementById('totalKarya').innerText=karyaList.length+' KARYA';
+  let slider=document.getElementById('slider'),f=String(filter||'Semua').toLowerCase();
+  let tampil=karyaList.filter(k=>{if(f==='semua')return true;return getTipe(k)===f||String(k.kategori||'').toLowerCase()===f});
+  if(!tampil.length){slider.innerHTML='<div class="empty">Belum ada karya di filter ini.<br><button onclick="location.href=\'upload.html\'" style="margin-top:10px;padding:10px 16px;border:none;border-radius:12px;background:#1a1a1a;color:#fff;font-weight:900;border:1px solid rgba(255,255,255,.25)">➕ Upload Pertama</button></div>';return}
+  slider.innerHTML=tampil.map((k,idx)=>{
+    let tipe=getTipe(k),foto=getFotoLink(k),link=foto||getLink(k),media='';
+    if(tipe==='foto'){media=link?`<img src="${escapeAttr(link)}" loading="lazy" decoding="async" onerror="fotoJadiVideo(this)">`:`<div class="videoGagal"><b>📸 FOTO GAK KE-BACA</b><small>Link kosong</small></div>`}
+    else{let emb=buatEmbed(link,false,tipe);if(emb.jenis==='youtube')media=`<iframe src="${escapeAttr(emb.embed)}" loading="eager" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;else if(emb.jenis==='mp4')media=`<video src="${escapeAttr(emb.embed)}" ${foto&&foto!==link?`poster="${escapeAttr(foto)}"`:''} autoplay muted loop playsinline preload="auto" class="autoVideo" data-idx="${idx}" onerror="videoJadiFoto(this)"></video>`;else if(emb.jenis==='drive')media=`<iframe src="${escapeAttr(emb.embed)}" loading="eager" allow="autoplay; fullscreen"></iframe>`;else if(emb.jenis==='foto')media=`<img src="${escapeAttr(emb.embed)}" loading="lazy" onerror="fotoJadiVideo(this)">`;else if(emb.jenis==='kosong')media=`<div class="videoGagal"><b>🎬 VIDEO GAK KE-BACA</b><small>Link kosong</small></div>`;else media=`<div class="videoGagal"><b>🎬 VIDEO</b><small>Klik LIAT</small></div><div class="playBadge"><span>${IC.play}</span></div>`}
+    let kl=komenUntukKarya(k.id,k.judul);
+    let kp='';
+    if(kl.length){
+      let last=kl[kl.length-1];
+      let namaP=potongTeks(last.nama||'',10);
+      let teksP=potongTeks(last.komen||last.teks||'',15);
+      kp=`<div class="komenPreview" onclick="event.stopPropagation();bukaKomen(${k.id})"><b>${escapeHtml(namaP)}:</b> <span>${escapeHtml(teksP)}</span></div>`;
+    }
+    let btnSuaraHtml = (tipe==='foto') ? '' : `<button class="btnSuara btnIcon" onclick="event.stopPropagation();toggleSuaraSlide(${k.id},event)">${IC.suara}</button>`;
+    return `<div class="slide" data-id="${k.id}"><div class="slideMedia" onclick="bukaViewer(${k.id})">${media}</div><div class="slideInfo"><b>${escapeHtml(k.judul)}</b><p>${escapeHtml(k.desk||'Tanpa deskripsi.')}</p><div class="slideMeta"><span>${IC.orang} ${escapeHtml(k.nama)}</span><span>${escapeHtml(k.kategori)}</span></div>${kp}<div class="slideBtns"><button class="btnLihat btnIcon" onclick="event.stopPropagation();bukaViewer(${k.id})">${IC.mata} LIAT</button><button class="btnKomen btnIcon" onclick="event.stopPropagation();bukaKomen(${k.id})">${IC.chat} ${kl.length}</button>${btnSuaraHtml}</div></div></div>`;
+  }).join('');setupSliderAuto();updateProgress();
+}
+function toggleSuaraSlide(id,ev){let s=document.querySelector(`.slide[data-id="${id}"] video`);if(!s){toast('Video ini dari YouTube / Drive, suara di viewer aja');bukaViewer(id);return}s.muted=!s.muted;if(!s.muted)s.play();toast(s.muted?'🔇 Suara OFF':'🔊 Suara ON')}
+function updateProgress(){if(progressRaf)return;progressRaf=requestAnimationFrame(()=>{progressRaf=null;let t=document.body.scrollHeight-window.innerHeight,p=t>0?Math.round(window.scrollY/t*100):0;if(p!==lastProgress){lastProgress=p;document.getElementById('progressFill').style.width=p+'%'}})}
+window.addEventListener('scroll',updateProgress,{passive:true});
+function playSemuaVideoDepan(){if(isViewerOpen||komenId)return;document.querySelectorAll('.autoVideo').forEach(v=>{let r=v.getBoundingClientRect();if(r.top<window.innerHeight+100&&r.bottom>-100){v.muted=true;v.play().catch(()=>{})}})}
+function setupSliderAuto(){currentObservers.forEach(o=>{try{o.disconnect()}catch(e){}});currentObservers=[];let vs=document.querySelectorAll('.autoVideo');if(!vs.length)return;vs.forEach(v=>{v.muted=true;v.play().catch(()=>{})});let obs=new IntersectionObserver(es=>{es.forEach(en=>{let vid=en.target;if(en.isIntersecting){vid.muted=true;vid.play().catch(()=>{})}else{vid.pause()}})},{threshold:[0.1],rootMargin:'100px'});vs.forEach(v=>obs.observe(v));currentObservers.push(obs)}
+['touchstart','click','scroll'].forEach(ev=>{document.addEventListener(ev,playSemuaVideoDepan,{passive:true})});
+ambilData(true);setInterval(()=>{syncKomenTertunda();ambilData(false)},30000);
+</script>
+</body>
+</html>
